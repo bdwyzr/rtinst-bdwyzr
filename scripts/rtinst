@@ -521,12 +521,6 @@ fi
 
 cd $home
 
-#raise file limits
-sed -i '/hard nofile/ d' /etc/security/limits.conf
-sed -i '/soft nofile/ d' /etc/security/limits.conf
-sed -i '$ i\* hard nofile 32768\n* soft nofile 16384' /etc/security/limits.conf
-
-
 ###############################
 ### CONFIGURE SSH ###
 ###############################
@@ -545,7 +539,6 @@ fi
 
 sed -i "/^\(\s\|#\)*Port / c\Port $sshport" /etc/ssh/sshd_config
 sed -i "/^\(\s\|#\)*X11Forwarding /c\X11Forwarding no" /etc/ssh/sshd_config
-sed -i '/^\s*PermitRootLogin/ c\PermitRootLogin no' /etc/ssh/sshd_config
 sed -i '/^\s*PasswordAuthentication no/ c\#PasswordAuthentication no' /etc/ssh/sshd_config
 
 grep -Pq "^[#\s]*UsePAM" /etc/ssh/sshd_config && sed -i '/^\(\s\|#\)*UsePAM/ c\UsePAM yes' /etc/ssh/sshd_config || echo "UsePAM yes" >> /etc/ssh/sshd_config
@@ -565,7 +558,6 @@ if ! [ -z "$allowlist" ]; then
     done
   sed -i "/$allowlist/ d" /etc/ssh/sshd_config
 fi
-grep "AllowGroups sudo sshuser" /etc/ssh/sshd_config > /dev/null || echo "AllowGroups sudo sshuser" >> /etc/ssh/sshd_config
 
 service ssh restart 1>> $logfile
 sshport=$(grep 'Port ' /etc/ssh/sshd_config | sed 's/[^0-9]*//g')
@@ -873,8 +865,6 @@ echo | tee $home/rtinst.info
 
 echo "SSH Configured" | tee -a $home/rtinst.info
 echo "   SSH port set to $sshport" | tee -a $home/rtinst.info
-echo "   root login directly from SSH disabled"
-echo "   login with $user and switch to root using: sudo su"
 
 echo | tee -a $home/rtinst.info
 

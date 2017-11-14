@@ -15,6 +15,7 @@
 mkdir -p /etc/inexistence/log
 touch /etc/inexistence/log/rutorrent_errors.log
 touch /etc/inexistence/log/rtorrent.log
+chmod -R 777 /etc/inexistence/log
 
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 

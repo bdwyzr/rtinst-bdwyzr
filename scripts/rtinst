@@ -12,6 +12,10 @@
 ### SET VARIABLES ###
 ###############################
 
+mkdir -p /etc/inexistence/log
+touch /etc/inexistence/log/rutorrent_errors.log
+touch /etc/inexistence/log/rtorrent.log
+
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 
 # if left blank will install latest version of rtorrent, or set to a specific release E.G. '0.9.6' to install that release

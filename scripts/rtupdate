@@ -178,7 +178,7 @@ rm -rf xmlrpc libtorrent* rtorrent*
 echo "Fetching source files"
 
 
-if [ $rtdevrel = 0 ]; then
+if [[ $rtdevrel = 0 ]] || [[ $rtvers == 0.9.6 ]]; then
   git clone -q -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
   git clone -q -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
 else

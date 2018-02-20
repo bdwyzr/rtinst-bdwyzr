@@ -60,7 +60,7 @@ sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo python-software-properties software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
 Install_list=""
 unixpass=""
 passflag=0
@@ -263,6 +263,8 @@ fi
 # check required web repos are accessible
 os_repo=0
 major_repo=0
+
+sed  -i "s/\/debian\s/\/debian\/ /g" /etc/apt/sources.list
 
 echo
 echo "Checking the web sites we will need are accessible"
@@ -828,10 +830,10 @@ echo "Configuring h5ai" | tee -a $logfile
 apt-get install -y imagemagick vim >> $logfile 2>&1
 cd /var/www
 wget --no-check-certificate -t1 --timeout=7 https://release.larsjung.de/h5ai/h5ai-0.29.0.zip >> $logfile 2>&1
-unzip -o h5ai-0.29.0.zip >> $logfile 2>&1
+unzip -o h5ai-0.29.0.zip  >/dev/null
 rm -rf h5ai-0.29.0.zip
-chmod 775 -R _h5ai/private/cache >> $logfile 2>&1
-chmod 775 -R _h5ai/public/cache >> $logfile 2>&1
+chmod 775 -R _h5ai/private/cache
+chmod 775 -R _h5ai/public/cache
 rm -rf index.html
 service nginx restart >> $logfile 2>&1
 mkdir -p /home/${user}/rtorrent/download
@@ -842,13 +844,13 @@ cd
 #### themes and filemanager ####
 echo "Installing RuTorrent themes and filemanager plugin" | tee -a $logfile
 cd /var/www/rutorrent/plugins
-git clone https://github.com/xombiemp/rutorrentMobile.git mobile >> $logfile 2>&1
+git clone https://github.com/xombiemp/rutorrentMobile.git mobile >/dev/null
 cd /var/www/rutorrent/plugins/theme/themes
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> $logfile 2>&1
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> $logfile 2>&1
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >/dev/null
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >/dev/null
 cd
 wget --no-check-certificate -t1 --timeout=7 https://github.com/Aniverse/RutFm/raw/master/filemanager.sh >> $logfile 2>&1
-bash filemanager.sh >> $logfile 2>&1
+bash filemanager.sh >/dev/null
 rm -rf filemanager.sh
 ###############################
 

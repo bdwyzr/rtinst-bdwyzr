@@ -6,19 +6,17 @@ Ubuntu and Debian Seedbox Installation
 
 Download and run setup (if logged in directly as root, do not need to use sudo)
 
-	sudo bash -c "$(wget --no-check-certificate -qO - https://raw.githubusercontent.com/arakasi72/rtinst/master/rtsetup)"
+	bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/arakasi72/rtinst/master/rtsetup)"
 
 and then to run the main script, ([check the options you can use](https://github.com/arakasi72/rtinst/wiki/Guide#21-main-script-options)):
 
-	sudo rtinst
+	rtinst
 
 It takes about 10 minutes to run, depending on your server setup. After you have run the script and everything is working, I suggest a reboot, the script does not automate this reboot, you need to do it manually using the reboot command.
 
 [A detailed installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
 
 [A detailed user guide](https://github.com/arakasi72/rtinst/wiki/Guide)
-
-**IMPORTANT: NOTE THE NEW SSH PORT AND MAKE SURE YOU CAN SSH INTO YOUR SERVER BEFORE CLOSING THE EXISTING SESSION**
 
 
 It has been tested with clean installs of: 
@@ -62,3 +60,16 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  --> Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+-------------------------------------------------------------------------
+
+## Modifications
+
+1. 使用 h5ai  
+2. 增加了 `filemanager` `ruTorrent Mobile` 插件  
+3. 增加了 `club-QuickBox` `MaterialDesign` 主题  
+4. 不关闭 root 登陆，不修改系统文件打开数  
+5. 使用支持 IPv6 的 rTorrent 0.9.4 与 0.9.6  
+6. 不修改 SSH 端口，FTP 端口设置为 21  
+7. 修改了 rTorrent 的默认参数（例如连接数）  
+

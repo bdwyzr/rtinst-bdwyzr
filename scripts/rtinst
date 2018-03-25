@@ -24,7 +24,7 @@ rtorrentrel=''
 
 #url's of the major components
 rt_url="http://rtorrent.net/downloads/"
-xmlrpc_url="https://svn.code.sf.net/p/xmlrpc-c/code/stable/"
+xmlrpc_url="https://github.com/Aniverse/xmlrpc-c/"
 ru_url="https://github.com/Novik/ruTorrent/"
 adl_url="https://github.com/autodl-community/"
 
@@ -65,7 +65,7 @@ sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo python-software-properties software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
 Install_list=""
 unixpass=""
 passflag=0
@@ -269,6 +269,8 @@ fi
 os_repo=0
 major_repo=0
 
+sed  -i "s/\/debian\s/\/debian\/ /g" /etc/apt/sources.list
+
 echo
 echo "Checking the web sites we will need are accessible"
 echo  "Checking $osname mirrors"
@@ -437,12 +439,12 @@ echo
 echo "Updating package lists" | tee $logfile
 apt-get -qq update | tee -a $logfile
 
-echo "Upgrading packages" | tee -a $logfile
+#echo "Upgrading packages" | tee -a $logfile
 export DEBIAN_FRONTEND=noninteractive
-apt-get -qq upgrade >> $logfile 2>&1
-if ! [ $? = 0 ]; then
-  echo "Problem upgrading packages. Run 'apt-get -qq upgrade' successfully and rerun the script" && exit
-fi
+#apt-get -qq upgrade >> $logfile 2>&1
+#if ! [ $? = 0 ]; then
+#  echo "Problem upgrading packages. Run 'apt-get -qq upgrade' successfully and rerun the script" && exit
+#fi
 
 apt-get clean && apt-get autoclean >> $logfile 2>&1
 
@@ -477,14 +479,16 @@ if [ $osname = "Debian" ] && ! installed unrar; then
   do
     attempts=$(( $attempts + 1 ))
     if [ "$(uname -m)" = "x86_64" ]; then
-      curl -s --connect-timeout 10 http://www.rarlab.com/rar/rarlinux-x64-5.4.0.tar.gz | tar xz 2>/dev/null
+      wget --no-check-certificate --timeout=10 -q https://raw.githubusercontent.com/Aniverse/rtinst/h5ai-ipv6/rarlinux-x64-5.5.0.tar.gz
+      tar zxf rarlinux-x64-5.5.0.tar.gz 2>/dev/null
     elif [ "$(uname -m)" = "x86_32" ]; then
-      curl -s --connect-timeout 10 http://www.rarlab.com/rar/rarlinux-5.4.0.tar.gz | tar xz 2>/dev/null
+      wget --no-check-certificate --timeout=10 -q https://raw.githubusercontent.com/Aniverse/rtinst/h5ai-ipv6/rarlinux-5.5.0.tar.gz
+      tar zxf rarlinux-5.5.0.tar.gz 2>/dev/null
     fi
   done
   if [ -d rar ]; then
-    cp $home/rar/rar /bin/rar
-    cp $home/rar/unrar /bin/unrar
+    cp -f $home/rar/rar /usr/bin/rar
+    cp -f $home/rar/unrar /usr/bin/unrar
     rm -r $home/rar
   fi
 elif [ $osname = "Ubuntu" ]; then
@@ -542,7 +546,7 @@ else
   sshport=$oldsshport
 fi
 
-sed -i "/^\(\s\|#\)*Port / c\Port $sshport" /etc/ssh/sshd_config
+#sed -i "/^\(\s\|#\)*Port / c\Port $sshport" /etc/ssh/sshd_config
 sed -i "/^\(\s\|#\)*X11Forwarding /c\X11Forwarding no" /etc/ssh/sshd_config
 sed -i '/^\s*PasswordAuthentication no/ c\#PasswordAuthentication no' /etc/ssh/sshd_config
 
@@ -579,7 +583,8 @@ rtsslcert -d
 ### INSTALL FTP ###
 ###############################
 
-ftpport=$(random 41005 48995)
+#ftpport=$(random 41005 48995)
+ftpport=21
 
 if [ $(dpkg-query -W -f='${Status}' "vsftpd" 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
   echo "Installing vsftpd" | tee -a $logfile
@@ -751,7 +756,7 @@ echo "\$homeDirectory = \"$home\";" >> /var/www/rutorrent/conf/users/$user/confi
 echo "\$topDirectory = \"$home\";" >> /var/www/rutorrent/conf/users/$user/config.php
 echo "\$scgi_port = 5000;" >> /var/www/rutorrent/conf/users/$user/config.php
 echo "\$XMLRPCMountPoint = \"/RPC2\";" >> /var/www/rutorrent/conf/users/$user/config.php
-echo "\$SCGIServerTimeout = 60;" >> /var/www/rutorrent/conf/users/black/config.php
+echo "\$SCGIServerTimeout = 60;" >> /var/www/rutorrent/conf/users/$user/config.php
 echo >> /var/www/rutorrent/conf/users/$user/config.php
 echo "?>" >> /var/www/rutorrent/conf/users/$user/config.php
 
@@ -813,6 +818,50 @@ else
   echo "gui-server-port = $adlport" >> autodl.cfg
   echo "gui-server-password = $adlpass" >> autodl.cfg
 fi
+
+###############################
+### Aniverse Mod ###
+###############################
+
+# For Ubuntu 16.04， haven't test on other os.
+apt-get install -y php-xml >> $logfile 2>&1
+
+mkdir -p /etc/inexistence/log
+touch /etc/inexistence/log/rutorrent_errors.log
+touch /etc/inexistence/log/rtorrent.log
+chmod -R 777 /etc/inexistence/log
+
+############ h5ai ############
+echo "Configuring h5ai" | tee -a $logfile
+apt-get install -y imagemagick vim >> $logfile 2>&1
+cd /var/www
+wget --no-check-certificate -t1 --timeout=7 https://release.larsjung.de/h5ai/h5ai-0.29.0.zip >> $logfile 2>&1
+unzip -o h5ai-0.29.0.zip  >/dev/null
+rm -rf h5ai-0.29.0.zip
+chmod 775 -R _h5ai/private/cache
+chmod 775 -R _h5ai/public/cache
+rm -rf index.html
+service nginx restart >> $logfile 2>&1
+mkdir -p /home/${user}/rtorrent/download
+ln -s /home/${user}/rtorrent/download/ /var/www/rtorrent.download
+cd
+###############################
+
+#### themes and filemanager ####
+echo "Installing RuTorrent themes and filemanager plugin" | tee -a $logfile
+cd /var/www/rutorrent/plugins
+git clone https://github.com/xombiemp/rutorrentMobile.git mobile >/dev/null
+cd /var/www/rutorrent/plugins/theme/themes
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >/dev/null
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >/dev/null
+cd
+wget --no-check-certificate -t1 --timeout=7 https://github.com/Aniverse/RutFm/raw/master/filemanager.sh >> $logfile 2>&1
+bash filemanager.sh >/dev/null
+rm -rf filemanager.sh
+###############################
+
+
+
 
 ###############################
 ### FINAL TASKS ###

@@ -481,36 +481,27 @@ if [[ $phpver =~ php7.[0-9] ]]; then
 fi
 
 #install unrar package
-if [ $osname = "Debian" ] && ! installed unrar; then
-  echo "Installing rar/unrar"
-  cd $home
-  attempts=0
-  until [ -d rar ] || [ $attempts -gt 5 ]
-  do
-    attempts=$(( $attempts + 1 ))
+if ! installed unrar; then
+    echo "Installing rar/unrar"
+    cd $home
     if [ "$(uname -m)" = "x86_64" ]; then
-      wget http://www.rarlab.com/rar/rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
-      tar xvzf rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
-      rm rarlinux-x64-5.5.0.tar.gz
+        wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
+        tar xvzf rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
+        rm rarlinux-x64-5.5.0.tar.gz
     elif [ "$(uname -m)" = "x86_32" ]; then
-      wget http://www.rarlab.com/rar/rarlinux-5.5.0.tar.gz >> $logfile 2>&1
-      tar xvzf rarlinux-5.5.0.tar.gz >> $logfile 2>&1
-      rm rarlinux-5.5.0.tar.gz
+        wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-5.5.0.tar.gz >> $logfile 2>&1
+        tar xvzf rarlinux-5.5.0.tar.gz >> $logfile 2>&1
+        rm rarlinux-5.5.0.tar.gz
     fi
-  done
-  if [ -d rar ]; then
-    cp $home/rar/rar /bin/rar
-    cp $home/rar/unrar /bin/unrar
+    cp -f $home/rar/rar /bin/rar
+    cp -f $home/rar/unrar /bin/unrar
     rm -r $home/rar
-  fi
-elif [ $osname = "Ubuntu" ]; then
-  apt-get -qq install unrar >> $logfile 2>&1
 fi
 
 if installed unrar; then
-  echo "rar/unrar installed"
+    echo "rar/unrar installed"
 else
-  echo "rar/unrar install failed"
+    echo "rar/unrar install failed"
 fi
 
 #install ffmpeg
@@ -780,10 +771,13 @@ echo "\$homeDirectory = \"$home\";" >> /var/www/rutorrent/conf/users/$user/confi
 echo "\$topDirectory = \"$home\";" >> /var/www/rutorrent/conf/users/$user/config.php
 echo "\$scgi_port = 5000;" >> /var/www/rutorrent/conf/users/$user/config.php
 echo "\$XMLRPCMountPoint = \"/RPC2\";" >> /var/www/rutorrent/conf/users/$user/config.php
+echo "\$SCGIServerTimeout = 60;" >> /var/www/rutorrent/conf/users/$user/config.php
 echo >> /var/www/rutorrent/conf/users/$user/config.php
 echo "?>" >> /var/www/rutorrent/conf/users/$user/config.php
 
 cp -f /etc/rtinst/conf/ru.ini /var/www/rutorrent/conf/plugins.ini
+[[ ! ` grep m2ts /var/www/rutorrent/plugins/screenshots/conf.php ` ]] && sed -i "s/\"mkv\"/\"mkv\",\"m2ts\"/g" /var/www/rutorrent/plugins/screenshots/conf.php
+
 if [ $osname = "Raspbian" ]; then
   sed -i '/\[screenshots\]/,+1d' /var/www/rutorrent/conf/plugins.ini
   sed -i '/\[unpack\]/,+1d' /var/www/rutorrent/conf/plugins.ini
@@ -841,6 +835,9 @@ else
   echo "gui-server-port = $adlport" >> autodl.cfg
   echo "gui-server-password = $adlpass" >> autodl.cfg
 fi
+
+# Fix AutoDL-Irssi issues on Ubuntu 16.04
+apt-get install -y php-xml >> $logfile 2>&1
 
 ###############################
 ### FINAL TASKS ###

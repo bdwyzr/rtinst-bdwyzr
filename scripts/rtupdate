@@ -13,7 +13,13 @@ PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 osname=$(lsb_release -si)
 relno=$(lsb_release -sr | cut -d. -f1)
 sourcedir='http://rtorrent.net/downloads/'
-xmlrpcloc='https://svn.code.sf.net/p/xmlrpc-c/code/stable'
+
+xmlrpc_url='https://svn.code.sf.net/p/xmlrpc-c/code/stable/'
+xmlrpcloc='svn://svn.code.sf.net/p/xmlrpc-c/code/stable/'
+
+xmlrpc_url_alt='https://github.com/mirror/xmlrpc-c'
+xmlrpcloc_alt='https://github.com/mirror/xmlrpc-c/trunk/stable'
+
 rtdevrel=1
 
 if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ]; then
@@ -91,7 +97,15 @@ xmlrpc_repo=0
 rt_repo=0
 echo
 echo "Checking File Repositories"
-echo -n "xmlrpc-c: "; check_url $xmlrpcloc && echo "OK" || { echo "FAIL"; xmlrpc_repo=1; }
+
+echo -n "xmlrpc-c: "; check_url $xmlrpc_url && echo "OK" ||  xmlrpc_repo=1
+
+if [[ $xmlrpc_repo = 1 ]]; then
+  xmlrpc_url=$xmlrpc_url_alt
+  xmlrpcloc=$xmlrpcloc_alt
+  check_url $xmlrpc_url && { echo "OK";  xmlrpc_repo=0; } || { echo "FAIL"; xmlrpc_repo=1; }
+fi
+
 echo -n "rtorrent: "; check_url $sourcedir && echo "OK" || { echo "FAIL"; rt_repo=1; }
 
 if [ $rt_repo = 1 ]; then
@@ -192,7 +206,7 @@ if [ $xmlrpc_repo = 0 ]; then
   cd xmlrpc
   echo "Installing xmlrpc" | tee -a $logfile
   ./configure --prefix=/usr --disable-cplusplus >> $logfile 2>&1
-  make -s >> $logfile 2>&1
+  make -j$(nproc) >> $logfile 2>&1
   make -s install >> $logfile 2>&1
   cd ..
 fi
@@ -205,14 +219,14 @@ if [ $osname = "Raspbian" ]; then
 else
   ./configure --prefix=/usr >> $logfile 2>&1
 fi
-make -s >> $logfile 2>&1
+make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 
 cd ../rtorrent-$rtvers
 echo "Installing rtorrent" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
 ./configure --prefix=/usr --with-xmlrpc-c >> $logfile 2>&1
-make -s >> $logfile 2>&1
+make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 ldconfig >> $logfile 2>&1
 

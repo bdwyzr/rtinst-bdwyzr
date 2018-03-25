@@ -19,7 +19,10 @@ rtorrentrel=''
 
 #url's of the major components
 rt_url="http://rtorrent.net/downloads/"
+
 xmlrpc_url="https://svn.code.sf.net/p/xmlrpc-c/code/stable/"
+xmlrpc_url_alt="https://github.com/mirror/xmlrpc-c"
+
 ru_url="https://github.com/Novik/ruTorrent/"
 adl_url="https://github.com/autodl-community/"
 
@@ -60,7 +63,7 @@ sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo python-software-properties software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
 Install_list=""
 unixpass=""
 passflag=0
@@ -264,6 +267,8 @@ fi
 os_repo=0
 major_repo=0
 
+sed  -i "s/\/debian\s/\/debian\/ /g" /etc/apt/sources.list
+
 echo
 echo "Checking the web sites we will need are accessible"
 echo  "Checking $osname mirrors"
@@ -275,7 +280,14 @@ done
 echo
 echo "Checking major 3rd party components"
 echo -n "Rtorrent: "; check_url $rt_url && echo "OK" || { echo "FAIL"; major_repo=1; }
-echo -n "xmlrpc-c: "; check_url $xmlrpc_url && echo "OK" || { echo "FAIL"; major_repo=1; }
+
+echo -n "xmlrpc-c: "; check_url $xmlrpc_url && echo "OK" ||  xmlrpc_repo=1
+
+if [[ $xmlrpc_repo = 1 ]]; then
+  xmlrpc_url=$xmlrpc_url_alt
+  check_url $xmlrpc_url && echo "OK" || { echo "FAIL"; major_repo=1; }
+fi
+
 echo -n "RuTorrent: ";check_url $ru_url && echo "OK" || { echo "FAIL"; major_repo=1; }
 echo -n "Autodl-irssi: "; check_url $adl_url && echo "OK" || { echo "FAIL"; major_repo=1; }
 
@@ -436,7 +448,7 @@ echo "Upgrading packages" | tee -a $logfile
 export DEBIAN_FRONTEND=noninteractive
 apt-get -qq upgrade >> $logfile 2>&1
 if ! [ $? = 0 ]; then
-  echo "Problem upgrading packages. Run 'apt-get -qq upgrade' successfully and rerun the script" && exit
+  echo "Problem upgrading packages. Run 'apt-get upgrade' successfully and rerun the script" && exit
 fi
 
 apt-get clean && apt-get autoclean >> $logfile 2>&1
@@ -472,9 +484,13 @@ if [ $osname = "Debian" ] && ! installed unrar; then
   do
     attempts=$(( $attempts + 1 ))
     if [ "$(uname -m)" = "x86_64" ]; then
-      curl -s --connect-timeout 10 http://www.rarlab.com/rar/rarlinux-x64-5.4.0.tar.gz | tar xz 2>/dev/null
+      wget http://www.rarlab.com/rar/rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
+      tar xvzf rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
+      rm rarlinux-x64-5.5.0.tar.gz
     elif [ "$(uname -m)" = "x86_32" ]; then
-      curl -s --connect-timeout 10 http://www.rarlab.com/rar/rarlinux-5.4.0.tar.gz | tar xz 2>/dev/null
+      wget http://www.rarlab.com/rar/rarlinux-5.5.0.tar.gz >> $logfile 2>&1
+      tar xvzf rarlinux-5.5.0.tar.gz >> $logfile 2>&1
+      rm rarlinux-5.5.0.tar.gz
     fi
   done
   if [ -d rar ]; then
@@ -548,6 +564,7 @@ sed -i "/^\(\s\|#\)*X11Forwarding /c\X11Forwarding no" /etc/ssh/sshd_config
 sed -i '/^\s*PermitRootLogin/ c\PermitRootLogin no' /etc/ssh/sshd_config
 sed -i '/^\s*PasswordAuthentication no/ c\#PasswordAuthentication no' /etc/ssh/sshd_config
 
+echo >> /etc/ssh/sshd_config
 grep -Pq "^[#\s]*UsePAM" /etc/ssh/sshd_config && sed -i '/^\(\s\|#\)*UsePAM/ c\UsePAM yes' /etc/ssh/sshd_config || echo "UsePAM yes" >> /etc/ssh/sshd_config
 grep -Pq "^[#\s]*UseDNS" /etc/ssh/sshd_config && sed -i '/^\(\s\|#\)*UseDNS/ c\UseDNS no' /etc/ssh/sshd_config || echo "UseDNS no" >> /etc/ssh/sshd_config
 

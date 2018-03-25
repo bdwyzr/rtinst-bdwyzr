@@ -514,22 +514,18 @@ else
 fi
 
 #install ffmpeg
-if ! [ $osname = "Raspbian" ] && [ $(dpkg-query -W -f='${Status}' "ffmpeg" 2>/dev/null | grep -c "ok installed") = 0 ]; then
-  echo "Installing ffmpeg"
-  if [ $relno = 14 ]; then
-    apt-add-repository -y ppa:mc3man/trusty-media >> $logfile 2>&1
-    apt-get -qq update >> $logfile 2>&1
-    apt-get -qq install ffmpeg >> $logfile 2>&1
-  elif [ $relno = 8 ]; then
-    grep "deb http://www.deb-multimedia.org jessie main" /etc/apt/sources.list >> /dev/null || echo "deb http://www.deb-multimedia.org jessie main" >> /etc/apt/sources.list
-    apt-get -qq update >> $logfile 2>&1
-    apt-get -qq --force-yes install deb-multimedia-keyring >> $logfile 2>&1
-    apt-get -qq update >> $logfile 2>&1
-    apt-get -qq --force-yes install ffmpeg >> $logfile 2>&1
-  else
-    apt-get -qq install ffmpeg >> $logfile 2>&1
-  fi
+echo "Installing ffmpeg" ; cd
+if [ "$(uname -m)" = "x86_64" ]; then
+    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-64bit-static.tar.xz >> $logfile 2>&1
+    tar xf ffmpeg-3.4.2-64bit-static.tar.xz
+elif [ "$(uname -m)" = "x86_32" ]; then
+    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-32bit-static.tar.xz >> $logfile 2>&1
+    tar xf ffmpeg-3.4.2-32bit-static.tar.xz
 fi
+rm -rf ffmpeg-*bit-static/{manpages,presets,readme.txt,GPLv3.txt}
+cp ffmpeg-*bit-static/* /usr/local/bin
+chmod 755 /usr/local/bin/{ffmpeg,ffprobe,ffmpeg-10bit,qt-faststart}
+rm -rf ffmpeg-*bit-static*
 
 echo "Completed installation of required packages        "
 
@@ -545,7 +541,7 @@ cd $home
 #raise file limits
 sed -i '/hard nofile/ d' /etc/security/limits.conf
 sed -i '/soft nofile/ d' /etc/security/limits.conf
-sed -i '$ i\* hard nofile 32768\n* soft nofile 16384' /etc/security/limits.conf
+sed -i '$ i\* hard nofile 666666\n* soft nofile 666666' /etc/security/limits.conf
 
 
 ###############################

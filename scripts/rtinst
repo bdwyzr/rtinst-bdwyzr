@@ -844,7 +844,52 @@ apt-get install -y php-xml >> $logfile 2>&1
 ### Aniverse Mod ###
 ###############################
 
-############ h5ai ############
+# 我也忘记是干嘛用的了
+apt-get install -y --allow-unauthenticated libncurses5-dev libncursesw5-dev >> $logfile 2>&1
+
+# Used for logging
+mkdir -p /etc/inexistence/01.Log
+touch /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
+chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
+
+###### ruTorrent themes #######
+echo "Installing ruTorrent themes" | tee -a $logfile
+cd /var/www/rutorrent/plugins/theme/themes
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> $logfile 2>&1
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> $logfile 2>&1
+
+###### ruTorrent plugins ######
+echo "Installing ruTorrent third party plugins" | tee -a $logfile
+cd /var/www/rutorrent/plugins
+git clone https://github.com/xombiemp/rutorrentMobile.git mobile >> $logfile 2>&1
+
+svn co https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/filemanager >> $logfile 2>&1
+cat > /var/www/rutorrent/plugins/filemanager/conf.php << EOF
+<?php
+
+\$fm['tempdir'] = '/tmp';                // path were to store temporary data ; must be writable
+\$fm['mkdperm'] = 755;           // default permission to set to new created directories
+
+// set with fullpath to binary or leave empty
+\$pathToExternals['rar'] = '$(which rar)';
+\$pathToExternals['zip'] = '$(which zip)';
+\$pathToExternals['unzip'] = '$(which unzip)';
+\$pathToExternals['tar'] = '$(which tar)';
+\$pathToExternals['bzip2'] = '$(which bzip2)';
+
+// archive mangling, see archiver man page before editing
+
+\$fm['archive']['types'] = array('rar', 'zip', 'tar', 'gzip', 'bzip2');
+
+\$fm['archive']['compress'][0] = range(0, 5);
+\$fm['archive']['compress'][1] = array('-0', '-1', '-9');
+\$fm['archive']['compress'][2] = \$fm['archive']['compress'][3] = \$fm['archive']['compress'][4] = array(0);
+
+?>
+EOF
+chmod -R 775 /var/www/rutorrent/plugins/filemanager/scripts
+
+############ h5ai #############
 echo "Configuring h5ai" | tee -a $logfile
 apt-get install -y imagemagick vim sox libsox-fmt-mp3 >> $logfile 2>&1
 cd /var/www
@@ -855,7 +900,7 @@ chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
 mkdir -p /var/www/download
 ln -s /home/${user}/rtorrent/download /var/www/download/rtorrent
-###############################
+
 
 ###############################
 ### FINAL TASKS ###

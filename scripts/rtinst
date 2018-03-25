@@ -16,9 +16,6 @@
 
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 
-# if left blank will install latest version of rtorrent, or set to a specific release E.G. '0.9.6' to install that release
-rtorrentrel=''
-
 #url's of the major components
 rt_url="http://rtorrent.net/downloads/"
 
@@ -73,6 +70,8 @@ passflag=0
 forceyes=1
 selfsign=1
 rut_add_users=1
+rtorrentrel=''
+enable_ipv6=1
 
 ###############################
 ### FUNCTIONS ###
@@ -239,7 +238,7 @@ else
 fi
 
 # get options
-OPTS=$(getopt -n "$0" -o dltfrmysu:p:w: --long "dload,log,ssh-default,ftp-default,rutorrent-stable,rutorrent-master,force-yes,self-signed,user:,password:,webpass:" -- "$@")
+OPTS=$(getopt -n "$0" -o dltfrmysu:p:w:v: --long "dload,log,ssh-default,ftp-default,rutorrent-stable,rutorrent-master,force-yes,self-signed,enable-ipv6,user:,password:,webpass:,rtversion:" -- "$@")
 
 eval set -- "$OPTS"
 
@@ -253,9 +252,11 @@ while true; do
     -m | --rutorrent-master ) rudevflag=0; shift;;
     -y | --force-yes ) forceyes=0; shift;;
     -s | --self-signed ) selfsign=0; shift;;
+         --enable-ipv6 ) enable_ipv6=0; shift;;
     -u | --user ) user="$2"; shift; shift;;
     -p | --password ) unixpass="$2"; shift; shift;;
     -w | --webpass ) webpass="$2"; shift; shift;;
+    -v | --rtversion ) rtorrentrel="$2"; shift; shift;;
     -- ) shift; break ;;
      * ) break ;;
   esac
@@ -728,7 +729,11 @@ if [ $skip_rt = 1 ]; then
   fi
   export home
   # call the script rtupdate to install lib/rtorrent
-  rtupdate $rtorrentrel || early_exit
+  if [ $enable_ipv6 = 1 ]; then
+    rtupdate "$rtorrentrel" || early_exit
+  else
+    rtupdate -i "$rtorrentrel" || early_exit
+  fi
   export -n home
 else
   echo "skiping rtorrent installation" | tee -a $logfile

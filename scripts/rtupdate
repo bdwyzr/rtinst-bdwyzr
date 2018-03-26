@@ -23,13 +23,13 @@ xmlrpc_url_alt='https://github.com/mirror/xmlrpc-c'
 xmlrpcloc_alt='https://github.com/mirror/xmlrpc-c/trunk/stable'
 
 rtdevrel=1
-enable_ipv6=0
-[[ $enable_ipv6 == 1 ]] && $ipv6opt=--enable-ipv6
+enable_ipv6=1
+[[ $enable_ipv6 == 0 ]] && $ipv6opt=--enable-ipv6 && ipv6show="(with IPv6 support)"
 
 # Check for options
 while getopts ":i" optname; do
     case $optname in
-        "i" ) enable_ipv6=1 ;;
+        "i" ) enable_ipv6=0 ;;
     esac
 done
 
@@ -44,6 +44,7 @@ fi
 listsize=6
 duoversion=''
 passed_rtvers=$1
+[[ $passed_rtvers == "-i" ]] && passed_rtvers=$2
 [ -z $logfile ] && logfile="/dev/null"
 
 # get a list of the most recent releases
@@ -166,7 +167,7 @@ if [ -z $passed_rtvers ]; then
 else
   if [ "$passed_rtvers" = "latest" ] || [ $(wget -q -O - $sourcedir | grep -o "rtorrent-$passed_rtvers.tar.gz" | wc -l) -eq 0 ]; then
     if [ "$passed_rtvers" != "latest" ]; then
-      echo " Could not find $passed_rtvers so using latest version instead"
+      echo "Could not find $passed_rtvers so using latest version instead"
     fi
     libvers=$latest_libvers
     rtvers=$latest_rtvers
@@ -189,7 +190,7 @@ if [ -z "$home" ]; then
 fi
 
 echo
-echo "Installing libtorrent-$libvers/rtorrent-$rtvers"
+echo "Installing libtorrent-$libvers/rtorrent-$rtvers $ipv6show"
 
 cd $home
 
@@ -208,10 +209,10 @@ echo "Fetching source files"
 if  [[ $rtdevrel == 0 ]]; then
      git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
      git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
-elif [[ $enable_ipv6 == 1 ]] && [[ $rtvers == 0.9.6 ]]; then
+elif [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
      git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
      git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
-elif [[ $enable_ipv6 == 1 ]] && [[ ! $rtvers == 0.9.6 ]]; then
+elif [[ $enable_ipv6 == 0 ]] && [[ ! $rtvers == 0.9.6 ]]; then
      wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/libtorrent-$libvers.tar.gz | tar xz
      wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/rtorrent-$rtvers.tar.gz    | tar xz
 else

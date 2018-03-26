@@ -48,8 +48,7 @@ if [ -d /etc/rtinst ] && [ -z $branch ]; then
   cd /etc/rtinst
   branch=$(basename "$(git symbolic-ref -q HEAD)")
   if [ -z $branch ]; then
-#   branch=$(git describe --tags --exact-match)
-    branch=master
+    branch=$(git describe --tags --exact-match)
     if [ ${branch:0:1} = v ]; then
       latest=$(basename "$(git ls-remote --tags https://github.com/Aniverse/rtinst.git | grep -o 'refs/tags/v.*' | sort -V | tail -1)")
       if [ $branch != $latest ]; then
@@ -71,7 +70,8 @@ if [ -d /etc/rtinst ] && [ -z $branch ]; then
 fi
 
 if [ -z $branch ] || [ $branch = release ]; then
-  branch=$(basename "$(git ls-remote --tags https://github.com/Aniverse/rtinst.git | grep -o 'refs/tags/v.*' | sort -V | tail -1)")
+# branch=$(basename "$(git ls-remote --tags https://github.com/Aniverse/rtinst.git | grep -o 'refs/tags/v.*' | sort -V | tail -1)")
+  branch=master
   if [ -z $branch ]; then
     echo "Could not find a numbered release, using master instead"
     branch=master

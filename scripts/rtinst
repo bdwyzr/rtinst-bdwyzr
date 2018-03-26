@@ -49,7 +49,19 @@ if [ $(lsb_release -sr) = "17.10" ]; then
   phploc=/etc/php/7.1
 fi
 
-export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+
+function isValidIpAddress() { echo $1 | grep -qE '^[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?$' ; }
+function isInternalIpAddress() { echo $1 | grep -qE '(192\.168\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(172\.((1[6-9])|(2\d)|(3[0-1]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(10\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))' ; }
+
+export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}' )
+export serverdn=$(perl -MSocket -le "print((gethostbyaddr(inet_aton('$serverip'), AF_INET))[0])")
+isInternalIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- v4.ipv6-test.com/api/myip.php )
+isValidIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//' )
+isValidIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T7 -qO- ipecho.net/plain )
+isValidIpAddress "$serverip" || { echo "Failed to detect your public IPv4 address, use internal address instead" ; export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}') ; }
+
+# This may be an internal IP, but it doesn't matter
+#export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 export logfile="/dev/null"
 webpass=''
 cronline1="@reboot sleep 10; /usr/local/bin/rtcheck irssi rtorrent"
@@ -313,8 +325,7 @@ echo
 
 echo "Your server's IP is set to $serverip"
 
-# Determine domain name using server ip address
-serverdn=$(perl -MSocket -le "print((gethostbyaddr(inet_aton('$serverip'), AF_INET))[0])")
+
 if [ -z "$serverdn" ]; then
   echo "Unable to determine domain"
 else
@@ -912,7 +923,7 @@ apt-get install -y imagemagick vim sox libsox-fmt-mp3 >> $logfile 2>&1
 cd /var/www
 wget --no-check-certificate -t1 --timeout=7 https://release.larsjung.de/h5ai/h5ai-0.29.0.zip >> $logfile 2>&1
 unzip -o h5ai-0.29.0.zip >/dev/null
-rm -rf h5ai-0.29.0.zip #index.html
+rm -rf h5ai-0.29.0.zip index.html
 chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
 mkdir -p /var/www/download
@@ -1017,7 +1028,7 @@ else
   fi
   echo "   to change rutorrent password enter: rtpass" | tee -a $home/rtinst.info
   echo | tee -a $home/rtinst.info
-  echo "   If enabled, access https downloads at https://$serverip/download/$user" | tee -a $home/rtinst.info
+  echo "   Access https downloads at https://$serverip" | tee -a $home/rtinst.info
 fi
 
 echo | tee -a $home/rtinst.info

@@ -216,8 +216,8 @@ elif [[ $enable_ipv6 == 0 ]] && [[ ! $rtvers == 0.9.6 ]]; then
      wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/libtorrent-$libvers.tar.gz | tar xz
      wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/rtorrent-$rtvers.tar.gz    | tar xz
 else
-     curl -# http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
-     curl -# http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz    | tar xz
+     curl -s http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
+     curl -s http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz    | tar xz
 fi
 
 

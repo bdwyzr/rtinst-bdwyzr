@@ -14,15 +14,15 @@ rtinst -tfylmi -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 - `-t` Do NOT change SSH port  
 - `-f` Set FTP port to 21  
 - `-y` Force yes to all the questions  
-- `-l` Enables logging to ~/rtinst.log  
-- `-m` Installs the latest master build of rutorrent  
+- `-l` Enable logging to ~/rtinst.log  
+- `-m` Install the latest master build of rutorrent  
 - `-i` Enable IPv6 for rTorrent and libtorrent-rakshasa  
-- `-u` Names the user to be primary rtorrent user  
-- `-p` Sets the unix password  
-- `-w` Sets the web password for the user  
-- `-v` Sets the rTorrent version you would like to be installed  
+- `-u` Name the user to be primary rtorrent user  
+- `-p` Set the unix password  
+- `-w` Set the web password for the user  
+- `-v` Set the rTorrent version you would like to be installed  
 
-Eg.  `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w flood233`  
+Eg.  `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w 12345678`  
 
 
 
@@ -41,7 +41,6 @@ Install MaterialDesign theme
 Install Filemanager plugin  
 Install Fileshare plugin  
 Install Mediastream plugin  
-Install Fileupload plugin ,install plowshare  
 Install sox for ruTorrent spectrogram plugin  
 Enable m2ts support for screenshots plugin  
 Set SCGIServerTimeout to 60 for ruTorrent  
@@ -51,11 +50,11 @@ Fix AutoDL-Irssi issue on Ubuntu 16.04
 - **Install ffmpeg 3.4.52 from static builds**  
 - **Install rar, unrar 5.5.0 (force)**  
 
-- **Tweak rTorrent default settings**  
 - **Enable rTorrent logging**  
+- **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  
-- **Do NOT disable vsftpd ipv6 listen**  
-- **Raised file limits to 666666**  
+- **Do NOT disable vsftpd IPv6 listen**  
+- **Raised open file limits to 666666**  
 - **To be added ...**  
 
 

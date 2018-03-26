@@ -238,7 +238,7 @@ else
 fi
 
 # get options
-OPTS=$(getopt -n "$0" -o dltfrmysiu:p:w:v: --long "dload,log,ssh-default,ftp-default,rutorrent-stable,rutorrent-master,force-yes,self-signed,enable-ipv6,user:,password:,webpass:,rtversion:" -- "$@")
+OPTS=$(getopt -n "$0" -o dltfrmysiu:p:w:v: --long "dload,log,ssh-default,ftp-default,rutorrent-stable,rutorrent-master,force-yes,self-signed,enable-ipv6,user:,password:,webpass:,version:" -- "$@")
 
 eval set -- "$OPTS"
 
@@ -256,7 +256,7 @@ while true; do
     -u | --user ) user="$2"; shift; shift;;
     -p | --password ) unixpass="$2"; shift; shift;;
     -w | --webpass ) webpass="$2"; shift; shift;;
-    -v | --rtversion ) rtorrentrel="$2"; shift; shift;;
+    -v | --version ) rtorrentrel="$2"; shift; shift;;
     -- ) shift; break ;;
      * ) break ;;
   esac

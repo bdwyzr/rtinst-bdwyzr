@@ -861,7 +861,7 @@ svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> $logfi
 #### ruTorrent filemanager ####
 echo "Installing ruTorrent third party plugins" | tee -a $logfile
 cd /var/www/rutorrent/plugins
-git clone https://github.com/xombiemp/rutorrentMobile.git mobile >> $logfile 2>&1
+apt-get -y install zip >> $logfile 2>&1
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/filemanager
 cat > /var/www/rutorrent/plugins/filemanager/conf.php << EOF
@@ -890,11 +890,12 @@ EOF
 chmod -R 755 /var/www/rutorrent/plugins/filemanager/scripts
 
 ###### ruTorrent plugins ######
-svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileupload
-apt-get -y install plowshare >> $logfile 2>&1
-mkdir -p /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload
-chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
-cp /var/www/rutorrent/plugins/fileupload/conf.php /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload/conf.php
+
+#svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileupload
+#apt-get -y install plowshare >> $logfile 2>&1
+#mkdir -p /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload
+#chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
+#cp /var/www/rutorrent/plugins/fileupload/conf.php /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload/conf.php
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileshare
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share.php
@@ -902,6 +903,8 @@ sed -i "s|'http://mydomain.com/share.php';|\$_SERVER['HTTP_HOST'] . '/share.php'
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/mediastream
 ln -s /var/www/rutorrent/plugins/mediastream/view.php /var/www/mediastream.php
+
+git clone https://github.com/xombiemp/rutorrentMobile mobile >> $logfile 2>&1
 
 ############ h5ai #############
 echo "Configuring h5ai" | tee -a $logfile

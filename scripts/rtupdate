@@ -4,6 +4,8 @@
 #
 #  Copyright (c) 2015 arakasi72 (https://github.com/arakasi72)
 #
+#  Modified by Aniverse
+#
 #  --> Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 #
 ######################################################################
@@ -21,6 +23,15 @@ xmlrpc_url_alt='https://github.com/mirror/xmlrpc-c'
 xmlrpcloc_alt='https://github.com/mirror/xmlrpc-c/trunk/stable'
 
 rtdevrel=1
+enable_ipv6=0
+[[ $enable_ipv6 == 1 ]] && $ipv6opt=--enable-ipv6
+
+# Check for options
+while getopts ":i" optname; do
+    case $optname in
+        "i" ) enable_ipv6=1 ;;
+    esac
+done
 
 if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ]; then
   rtdevrel=0
@@ -192,13 +203,24 @@ rm -rf xmlrpc libtorrent* rtorrent*
 echo "Fetching source files"
 
 
-if [ $rtdevrel = 0 ]; then
-  git clone -q -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
-  git clone -q -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
+
+
+if  [[ $rtdevrel == 0 ]]; then
+     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
+     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
+elif [[ $enable_ipv6 == 1 ]] && [[ $rtvers == 0.9.6 ]]; then
+     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
+     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
+elif [[ $enable_ipv6 == 1 ]] && [[ ! $rtvers == 0.9.6 ]]; then
+     wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/libtorrent-$libvers.tar.gz | tar xz
+     wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/rtorrent-$rtvers.tar.gz    | tar xz
 else
-  curl -# http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
-  curl -# http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz | tar xz
+     curl -# http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
+     curl -# http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz    | tar xz
 fi
+
+
+
 
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
@@ -215,9 +237,9 @@ cd libtorrent-$libvers
 echo "Installing libtorrent" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
 if [ $osname = "Raspbian" ]; then
-  ./configure --prefix=/usr --disable-instrumentation >> $logfile 2>&1
+  ./configure --prefix=/usr --disable-instrumentation $ipv6opt >> $logfile 2>&1
 else
-  ./configure --prefix=/usr >> $logfile 2>&1
+  ./configure --prefix=/usr $ipv6opt >> $logfile 2>&1
 fi
 make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
@@ -225,7 +247,7 @@ make -s install >> $logfile 2>&1
 cd ../rtorrent-$rtvers
 echo "Installing rtorrent" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
-./configure --prefix=/usr --with-xmlrpc-c >> $logfile 2>&1
+./configure --prefix=/usr --with-xmlrpc-c $ipv6opt >> $logfile 2>&1
 make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 ldconfig >> $logfile 2>&1

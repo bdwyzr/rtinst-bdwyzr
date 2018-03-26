@@ -6,19 +6,23 @@
 
 ```
 bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/Aniverse/rtinst/master/rtsetup)"
-rtinst- tflymi -v 0.9.4 -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
+```
+```
+rtinst -tfylmi -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
 ```
 
 - `-t` Do NOT change SSH port  
 - `-f` Set FTP port to 21  
-- -m, Installs the latest master build of rutorrent  
-- -y, Force yes to all the questions  
-- -l, Enables logging to ~/rtinst.log  
-- -i, Enable IPv6 for rTorrent and libtorrent-rakshasa  
-- -u, Names the user to be primary rtorrent user  
-- -p, Sets the unix password  
-- -w, Sets the web password for the user  
-- -v, Sets the rTorrent version you would like to be installed  
+- `-y` Force yes to all the questions  
+- `-l` Enables logging to ~/rtinst.log  
+- `-m` Installs the latest master build of rutorrent  
+- `-i` Enable IPv6 for rTorrent and libtorrent-rakshasa  
+- `-u` Names the user to be primary rtorrent user  
+- `-p` Sets the unix password  
+- `-w` Sets the web password for the user  
+- `-v` Sets the rTorrent version you would like to be installed  
+
+eg. `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w flood233`
 
 
 

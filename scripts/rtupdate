@@ -24,7 +24,6 @@ xmlrpcloc_alt='https://github.com/mirror/xmlrpc-c/trunk/stable'
 
 rtdevrel=1
 enable_ipv6=1
-[[ $enable_ipv6 == 0 ]] && $ipv6opt=--enable-ipv6 && ipv6show="(with IPv6 support)"
 
 # Check for options
 while getopts ":i" optname; do
@@ -32,6 +31,8 @@ while getopts ":i" optname; do
         "i" ) enable_ipv6=0 ;;
     esac
 done
+
+[[ $enable_ipv6 == 0 ]] && ipv6opt=--enable-ipv6 && ipv6show="(with IPv6 support)"
 
 if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ]; then
   rtdevrel=0

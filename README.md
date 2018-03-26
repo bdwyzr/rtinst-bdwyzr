@@ -22,7 +22,7 @@ rtinst -tfylmi -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 - `-w` Sets the web password for the user  
 - `-v` Sets the rTorrent version you would like to be installed  
 
-eg. `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w flood233`
+Eg.  `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w flood233`  
 
 
 

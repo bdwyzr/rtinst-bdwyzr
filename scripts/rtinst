@@ -585,7 +585,7 @@ if ! [ -z "$allowlist" ]; then
     done
   sed -i "/$allowlist/ d" /etc/ssh/sshd_config
 fi
-grep "AllowGroups sudo sshuser" /etc/ssh/sshd_config > /dev/null || echo "AllowGroups sudo sshuser" >> /etc/ssh/sshd_config
+#grep "AllowGroups sudo sshuser" /etc/ssh/sshd_config > /dev/null || echo "AllowGroups sudo sshuser" >> /etc/ssh/sshd_config
 
 service ssh restart 1>> $logfile
 sshport=$(grep 'Port ' /etc/ssh/sshd_config | sed 's/[^0-9]*//g')
@@ -987,8 +987,8 @@ echo | tee $home/rtinst.info
 
 echo "SSH Configured" | tee -a $home/rtinst.info
 echo "   SSH port set to $sshport" | tee -a $home/rtinst.info
-echo "   root login directly from SSH disabled"
-echo "   login with $user and switch to root using: sudo su"
+# echo "   root login directly from SSH disabled"
+# echo "   login with $user and switch to root using: sudo su"
 
 echo | tee -a $home/rtinst.info
 

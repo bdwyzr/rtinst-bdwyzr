@@ -9,8 +9,8 @@ bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/An
 rtinst- tflymi -v 0.9.4 -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
 ```
 
-- -t, Do NOT change SSH port  
-- -f, Set FTP port to 21  
+- `-t` Do NOT change SSH port  
+- `-f` Set FTP port to 21  
 - -m, Installs the latest master build of rutorrent  
 - -y, Force yes to all the questions  
 - -l, Enables logging to ~/rtinst.log  
@@ -25,13 +25,13 @@ rtinst- tflymi -v 0.9.4 -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 
 ## Modifications
 
-- New Opinions  
+- **New Opinions**  
 Enable IPv6 when using -i opinion  
 Set FTP port to 21 when using -f opinion  
 Do NOT change SSH port but not sets it to 22 when using -t opinion  
 Change the rtorrent version to be installed by using -v opinion  
 
-- ruTorrent plugins and themes  
+- **ruTorrent plugins and themes**  
 Install club-QuickBox theme  
 Install MaterialDesign theme  
 Install Filemanager plugin  
@@ -41,18 +41,18 @@ Install Fileupload plugin ,install plowshare
 Install sox for ruTorrent spectrogram plugin  
 Enable m2ts support for screenshots plugin  
 Set SCGIServerTimeout to 60 for ruTorrent  
-- Fix AutoDL-Irssi issues on Ubuntu 16.04  
+Fix AutoDL-Irssi issue on Ubuntu 16.04  
 
-- Install h5ai as file indexer  
-- Install ffmpeg 3.4.52 from static builds  
-- Install rar, unrar 5.5.0 (force)  
+- **Install h5ai as file indexer**  
+- **Install ffmpeg 3.4.52 from static builds**  
+- **Install rar, unrar 5.5.0 (force)**  
 
-- Do NOT disable root login  
-- Do NOT disable vsftpd ipv6 listen  
-- Raised file limits to 666666  
-- Enable rTorrent logging  
-
-- To be added ...  
+- **Tweak rTorrent default settings**  
+- **Enable rTorrent logging**  
+- **Do NOT disable root login**  
+- **Do NOT disable vsftpd ipv6 listen**  
+- **Raised file limits to 666666**  
+- **To be added ...**  
 
 
 

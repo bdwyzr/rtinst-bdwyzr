@@ -711,6 +711,22 @@ echo "location ~* \.(jpg|jpeg|gif|css|png|js|woff|ttf|svg|eot)$ {" > /etc/nginx/
 echo "        expires 30d;" >> /etc/nginx/conf.d/cache
 echo "}" >> /etc/nginx/conf.d/cache
 
+# set up default proxy settings
+echo 'proxy_redirect off;' > /etc/nginx/conf.d/proxy.conf
+echo 'proxy_set_header Host $host;' >> /etc/nginx/conf.d/proxy.conf
+echo 'proxy_set_header X-Real-IP $remote_addr;' >> /etc/nginx/conf.d/proxy.conf
+echo 'proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;' >> /etc/nginx/conf.d/proxy.conf
+echo 'proxy_cache off;' >> /etc/nginx/conf.d/proxy.conf
+echo 'proxy_buffering off;' >> /etc/nginx/conf.d/proxy.conf
+
+# clients reverse proxy
+mkdir -p /etc/nginx/snippets
+cp -f /etc/rtinst/conf/deluge.conf       /etc/nginx/snippets/deluge.conf
+cp -f /etc/rtinst/conf/rutorrent.conf    /etc/nginx/snippets/rutorrent.conf
+cp -f /etc/rtinst/conf/qbittorrent.conf   /etc/nginx/snippets/qbittorrent.conf
+cp -f /etc/rtinst/conf/transmission.conf /etc/nginx/snippets/transmission.conf
+
+
 service nginx restart && service $phpver-fpm restart
 
 if [ $dlflag = 0 ]; then
@@ -926,8 +942,7 @@ unzip -o h5ai-0.29.0.zip >/dev/null
 rm -rf h5ai-0.29.0.zip index.html
 chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
-mkdir -p /var/www/download
-ln -s /home/${user}/rtorrent/download /var/www/download/rtorrent
+ln -s /home/${user}/rtorrent/download /var/www/rtorrent.download
 
 
 ###############################

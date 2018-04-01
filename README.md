@@ -8,7 +8,10 @@
 bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/Aniverse/rtinst/master/rtsetup)"
 ```
 ```
-rtinst -tfylmi -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
+rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
+```
+```
+rtinst -tfylmi -v 0.9.4 -u aniverse -p kinots74212 -w rutmypa44  
 ```
 
 - `-t` Do NOT change SSH port  
@@ -22,7 +25,6 @@ rtinst -tfylmi -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 - `-w` Set the web password for the user  
 - `-v` Set the rTorrent version you would like to be installed  
 
-Eg.  `rtinst -tfylmi -v 0.9.4 -u aniverse -p flood233 -w 12345678`  
 
 
 

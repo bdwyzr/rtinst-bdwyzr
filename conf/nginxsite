@@ -41,10 +41,10 @@ server {
                include /etc/nginx/conf.d/cache;
         }
 
-        include snippets/transmission.conf;
+      # include snippets/transmission.conf;
       # include snippets/rutorrent.conf;
-        include snippets/deluge.conf;
-        include snippets/qbittorrent.conf;
+      # include snippets/deluge.conf;
+      # include snippets/qbittorrent.conf;
 
         location ~ /\.ht {
                 deny all;

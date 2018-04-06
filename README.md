@@ -59,6 +59,7 @@ Fix AutoDL-Irssi issue on Ubuntu 16.04
 - **Raised open file limits to 666666**  
 
 - **Setup Nginx Reverse Proxy for Deluge, qBittorrent and Transmission**  
+2018.04.06: Temporarily disabled  
 
 - **To be added ...**  
 

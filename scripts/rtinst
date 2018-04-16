@@ -948,7 +948,7 @@ unzip -o h5ai-0.29.0.zip >/dev/null
 rm -rf h5ai-0.29.0.zip # index.html
 chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
-ln -s /home/${user}/rtorrent/download /var/www/h5ai/rtdownload
+ln -s /home/${user}/rtorrent/download /var/www/h5ai/rtorrent
 
 
 ###############################

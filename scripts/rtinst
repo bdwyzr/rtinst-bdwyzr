@@ -942,13 +942,13 @@ git clone https://github.com/xombiemp/rutorrentMobile mobile >> $logfile 2>&1
 ############ h5ai #############
 echo "Configuring h5ai" | tee -a $logfile
 apt-get install -y imagemagick vim sox libsox-fmt-mp3 >> $logfile 2>&1
-cd /var/www
+mkdir -p /var/www/h5ai && cd /var/www/h5ai
 wget --no-check-certificate -t1 --timeout=7 https://release.larsjung.de/h5ai/h5ai-0.29.0.zip >> $logfile 2>&1
 unzip -o h5ai-0.29.0.zip >/dev/null
-rm -rf h5ai-0.29.0.zip index.html
+rm -rf h5ai-0.29.0.zip # index.html
 chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
-ln -s /home/${user}/rtorrent/download /var/www/rtdownload
+ln -s /home/${user}/rtorrent/download /var/www/h5ai/rtdownload
 
 
 ###############################
@@ -1049,7 +1049,7 @@ else
   fi
   echo "   to change rutorrent password enter: rtpass" | tee -a $home/rtinst.info
   echo | tee -a $home/rtinst.info
-  echo "   Access https downloads at https://$serverip" | tee -a $home/rtinst.info
+  echo "   Access https downloads at https://$serverip/h5ai" | tee -a $home/rtinst.info
 fi
 
 echo | tee -a $home/rtinst.info

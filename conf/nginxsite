@@ -21,7 +21,7 @@ server {
         ssl_certificate_key /etc/ssl/private/ruweb.key;
         ssl_session_timeout 5m;
         
-        location / {
+        location /h5ai {
                try_files $uri $uri/ =404;
                auth_basic "Restricted";
                auth_basic_user_file /etc/nginx/.htpasswd;

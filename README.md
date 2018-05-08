@@ -51,7 +51,6 @@ Fix AutoDL-Irssi issue on Ubuntu 16.04
 - **Install h5ai as file indexer**  
 - **Install ffmpeg 3.4.2 from static builds**  
 - **Install rar, unrar 5.5.0 (donot use apt)**  
-
 - **Enable rTorrent logging**  
 - **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  

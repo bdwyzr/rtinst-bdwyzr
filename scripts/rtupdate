@@ -34,7 +34,7 @@ done
 
 [[ $enable_ipv6 == 0 ]] && ipv6opt=--enable-ipv6 && ipv6show="(with IPv6 support)"
 
-if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ]; then
+if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ] || [ $relno = 18 ]; then
   rtdevrel=0
 fi
 

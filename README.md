@@ -48,9 +48,22 @@ Enable m2ts support for screenshots plugin
 Set SCGIServerTimeout to 60  
 Fix AutoDL-Irssi issue on Ubuntu 16.04  
 
+<<<<<<< HEAD
 - **Install h5ai as file indexer**  
 - **Install ffmpeg 3.4.2 from static builds**  
 - **Install rar, unrar 5.5.0 (donot use apt)**  
+=======
+	Ubuntu 12 (unsupported)
+	Ubuntu 13 (unsupported)
+	Ubuntu 14
+	Ubuntu 15
+	Ubuntu 16
+	Ubuntu 17
+	Ubuntu 18
+	Debian 7 "Wheezy" (unsupported)
+	Debian 8 "Jessie"
+	Debian 9 "Stretch"
+>>>>>>> 4e4f24859621546ff2a94dfd9b27d9ec08c67549
 
 - **Enable rTorrent logging**  
 - **Tweak rTorrent default settings**  

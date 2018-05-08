@@ -61,7 +61,7 @@ fi
 function isValidIpAddress() { echo $1 | grep -qE '^[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?$' ; }
 function isInternalIpAddress() { echo $1 | grep -qE '(192\.168\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(172\.((1[6-9])|(2\d)|(3[0-1]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(10\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))' ; }
 
-export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}' )
+export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
 export serverdn=$(perl -MSocket -le "print((gethostbyaddr(inet_aton('$serverip'), AF_INET))[0])")
 isInternalIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- v4.ipv6-test.com/api/myip.php )
 isValidIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//' )
@@ -70,7 +70,6 @@ isValidIpAddress "$serverip" || { echo "Failed to detect your public IPv4 addres
 
 # This may be an internal IP, but it doesn't matter
 #export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
 export logfile="/dev/null"
 webpass=''
 cronline1="@reboot sleep 10; /usr/local/bin/rtcheck irssi rtorrent"

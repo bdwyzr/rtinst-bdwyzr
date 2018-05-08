@@ -49,9 +49,14 @@ if [ $(lsb_release -sr) = "17.10" ]; then
   phpver=php7.1
   phploc=/etc/php/7.1
   geoipver=php-geoip
-<<<<<<< HEAD
 fi
 
+if [ "$relno" = "18" ]; then
+  phpver=php7.2
+  phploc=/etc/php/7.2
+  geoipver=php-geoip
+  libcver=libcurl4
+fi
 
 function isValidIpAddress() { echo $1 | grep -qE '^[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?$' ; }
 function isInternalIpAddress() { echo $1 | grep -qE '(192\.168\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(172\.((1[6-9])|(2\d)|(3[0-1]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(10\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))' ; }
@@ -65,18 +70,7 @@ isValidIpAddress "$serverip" || { echo "Failed to detect your public IPv4 addres
 
 # This may be an internal IP, but it doesn't matter
 #export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-=======
-fi
-
-if [ "$relno" = "18" ]; then
-  phpver=php7.2
-  phploc=/etc/php/7.2
-  geoipver=php-geoip
-  libcver=libcurl4
-fi
-
 export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
->>>>>>> 4e4f24859621546ff2a94dfd9b27d9ec08c67549
 export logfile="/dev/null"
 webpass=''
 cronline1="@reboot sleep 10; /usr/local/bin/rtcheck irssi rtorrent"

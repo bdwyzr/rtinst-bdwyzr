@@ -34,14 +34,15 @@ fullrel=$(lsb_release -sd)
 osname=$(lsb_release -si)
 relno=$(lsb_release -sr | cut -d. -f1)
 
+phpver=php5
+phploc=/etc/php5
+geoipver=php5-geoip
+libcver=libcurl3
+
 if [ "$relno" = "16" ] || [ "$relno" = "17" ] || [ "$relno" = "9" ]; then
   phpver=php7.0
   phploc=/etc/php/7.0
   geoipver=php-geoip
-else
-  phpver=php5
-  phploc=/etc/php5
-  geoipver=php5-geoip
 fi
 
 if [ $(lsb_release -sr) = "17.10" ]; then
@@ -50,11 +51,17 @@ if [ $(lsb_release -sr) = "17.10" ]; then
   geoipver=php-geoip
 fi
 
+if [ "$relno" = "18" ]; then
+  phpver=php7.2
+  phploc=/etc/php/7.2
+  geoipver=php-geoip
+  libcver=libcurl4
+fi
 
 function isValidIpAddress() { echo $1 | grep -qE '^[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?$' ; }
 function isInternalIpAddress() { echo $1 | grep -qE '(192\.168\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(172\.((1[6-9])|(2\d)|(3[0-1]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))|(10\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.((\d{1,2})$|(1\d{2})$|(2[0-4]\d)$|(25[0-5])$))' ; }
 
-export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}' )
+export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
 export serverdn=$(perl -MSocket -le "print((gethostbyaddr(inet_aton('$serverip'), AF_INET))[0])")
 isInternalIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- v4.ipv6-test.com/api/myip.php )
 isValidIpAddress "$serverip" || export serverip=$( wget --no-check-certificate -t1 -T6 -qO- checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//' )
@@ -76,7 +83,7 @@ sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev libcurl3 libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
 Install_list=""
 unixpass=""
 passflag=0
@@ -630,6 +637,10 @@ if [[ $LANG =~ .*[Uu][Tt][Ff]-?8.* ]]; then
   grep -Pq "utf8_filesystem=" /etc/vsftpd.conf && sed -i '/^\(\s\|#\)*utf8_filesystem=/ c\utf8_filesystem=YES' /etc/vsftpd.conf ||  echo "utf8_filesystem=YES" >> /etc/vsftpd.conf
 fi
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4e4f24859621546ff2a94dfd9b27d9ec08c67549
 grep -Pq "use_sendfile=" /etc/vsftpd.conf && sed -i '/^\(\s\|#\)*use_sendfile=/ c\use_sendfile=NO' /etc/vsftpd.conf ||  echo "use_sendfile=NO" >> /etc/vsftpd.conf
 grep -Pq "^\s*ssl_enable" /etc/vsftpd.conf && sed -i '/^\s*ssl_enable/ c\ssl_enable=YES' /etc/vsftpd.conf ||  echo "ssl_enable=YES" >> /etc/vsftpd.conf
 grep -Pq "^\s*chroot_local_user" /etc/vsftpd.conf &&  sed -i '/^\s*chroot_local_user/ c\chroot_local_user=YES' /etc/vsftpd.conf || echo "chroot_local_user=YES" >> /etc/vsftpd.conf
@@ -700,12 +711,10 @@ cp -f /etc/rtinst/conf/nginxsitedl /etc/nginx/sites-available/dload-loc
 echo "location ~ \.php$ {" > /etc/nginx/conf.d/php
 echo "          fastcgi_split_path_info ^(.+\.php)(/.+)$;" >> /etc/nginx/conf.d/php
 
-if [ "$phpver" = "php7.0" ]; then
-  echo "          fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;" >> /etc/nginx/conf.d/php
-elif [ "$phpver" = "php7.1" ]; then
-  echo "          fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;" >> /etc/nginx/conf.d/php
-else
+if [ "$phpver" = "php5" ]; then
   echo "          fastcgi_pass unix:/var/run/php5-fpm.sock;" >> /etc/nginx/conf.d/php
+else
+  echo "          fastcgi_pass unix:/var/run/php/$phpver-fpm.sock;" >> /etc/nginx/conf.d/php
 fi
 
 echo "          fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;" >> /etc/nginx/conf.d/php

@@ -629,7 +629,7 @@ sed -i '/^\(\s\|#\)*listen=/ c\listen=YES' /etc/vsftpd.conf
 sed -i '/^\(\s\|#\)*rsa_private_key_file/ c\rsa_private_key_file=\/etc\/ssl\/private\/ruweb\.key' /etc/vsftpd.conf
 sed -i '/^\(\s\|#\)*rsa_cert_file/ c\rsa_cert_file=\/etc\/ssl\/ruweb\.crt' /etc/vsftpd.conf
 
-#sed -i 's/^\s*listen_ipv6/#listen_ipv6/g' /etc/vsftpd.conf
+sed -i 's/^\s*listen_ipv6/#listen_ipv6/g' /etc/vsftpd.conf
 
 grep ^listen_port /etc/vsftpd.conf > /dev/null || echo "listen_port=$ftpport" >> /etc/vsftpd.conf
 
@@ -736,7 +736,8 @@ cp -f /etc/rtinst/conf/deluge.conf       /etc/nginx/snippets/deluge.conf
 cp -f /etc/rtinst/conf/rutorrent.conf    /etc/nginx/snippets/rutorrent.conf
 cp -f /etc/rtinst/conf/qbittorrent.conf   /etc/nginx/snippets/qbittorrent.conf
 cp -f /etc/rtinst/conf/transmission.conf /etc/nginx/snippets/transmission.conf
-
+cp -f /etc/rtinst/conf/flood.conf /etc/nginx/snippets/flood.conf
+# cp -f /etc/rtinst/conf/flexget.conf /etc/nginx/snippets/flexget.conf
 
 service nginx restart && service $phpver-fpm restart
 

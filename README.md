@@ -54,7 +54,6 @@ Fix AutoDL-Irssi issue on Ubuntu 16.04
 - **Enable rTorrent logging**  
 - **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  
-- **Do NOT disable vsftpd IPv6 listen**  
 - **Raised open file limits to 666666**  
 
 - **Setup Nginx Reverse Proxy for Deluge, qBittorrent and Transmission**  

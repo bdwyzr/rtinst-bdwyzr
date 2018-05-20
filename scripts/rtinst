@@ -502,7 +502,7 @@ fi
 #install unrar package
 if ! installed unrar; then
     echo "Installing rar/unrar"
-    cd $home
+    cd /root
     if [ "$(uname -m)" = "x86_64" ]; then
         wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
         tar xvzf rarlinux-x64-5.5.0.tar.gz >> $logfile 2>&1
@@ -512,9 +512,9 @@ if ! installed unrar; then
         tar xvzf rarlinux-5.5.0.tar.gz >> $logfile 2>&1
         rm rarlinux-5.5.0.tar.gz
     fi
-    cp -f $home/rar/rar /bin/rar
-    cp -f $home/rar/unrar /bin/unrar
-    rm -r $home/rar
+    cp -f /root/rar/rar /bin/rar
+    cp -f /root/rar/unrar /bin/unrar
+    rm -r /root/rar
 fi
 
 if installed unrar; then

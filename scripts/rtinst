@@ -390,13 +390,16 @@ if [ -z "$user" ]; then
   fi
 fi
 
+# Lower case
+user=`  echo $user | tr 'A-Z' 'a-z'  `
+
 if id -u $user >/dev/null 2>&1; then
   echo "$user already exists"
 else
   if [ -z "$unixpass" ]; then
-    adduser --gecos "" $user
+    adduser --force-badname --gecos "" $user
   else
-    adduser --gecos "" $user --disabled-password
+    adduser --force-badname --gecos "" $user --disabled-password
     echo "$user:$unixpass" | sudo chpasswd
   fi
 fi

@@ -235,7 +235,7 @@ if [ $xmlrpc_repo = 0 ]; then
 fi
 
 cd libtorrent-$libvers
-echo "Installing libtorrent" | tee -a $logfile
+echo "Installing libtorrent-rakshasa" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
 if [ $osname = "Raspbian" ]; then
   ./configure --prefix=/usr --disable-instrumentation $ipv6opt >> $logfile 2>&1

@@ -1,4 +1,5 @@
 #!/bin/bash
+# 2018.06.09
 
 ######################################################################
 #
@@ -38,9 +39,9 @@ if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ] || [ $relno = 18 ]; then
   rtdevrel=0
 fi
 
-if [ $rtdevrel = 0 ]; then
-  sourcedir='https://github.com/rakshasa/'
-fi
+# if [ $rtdevrel = 0 ]; then
+#   sourcedir='https://github.com/rakshasa/'
+# fi
 
 listsize=6
 duoversion=''
@@ -141,48 +142,37 @@ if [ $xmlrpc_repo = 1 ]; then
 fi
 
 if [ -z $passed_rtvers ]; then
-  if ( installed rtorrent ); then
-    rt_current=$(rtorrent -h | grep -om 1 "[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}")
-    echo "rtorrent $rt_current detected"
-  else
-    echo "rtorrent NOT installed"
-    echo "This script is for upgrading/downgrading only, not for initial install"
-    exit 1
-  fi
 
-# checks if the OS is debian 9, and forces the version to 0.9.6 of it is
-  if [ $rtdevrel = 0 ]; then
-    libvers='0.13.6'
-    rtvers='0.9.6'
-    echo "Debian 9 and Ubuntu 17.10 are only supported by libtorrent-0.13.6/rtorrent-0.9.6"
-  else
-    list_version
-  fi
-
-  echo "Install libtorrent-$libvers and rtorrent-$rtvers"
-  echo "Your rtorrent config, torrents, and data will not be lost or changed"
-  echo -n "Continue? "
-  if ! ask_user; then
-    exit
-  fi
-else
-  if [ "$passed_rtvers" = "latest" ] || [ $(wget -q -O - $sourcedir | grep -o "rtorrent-$passed_rtvers.tar.gz" | wc -l) -eq 0 ]; then
-    if [ "$passed_rtvers" != "latest" ]; then
-      echo "Could not find $passed_rtvers so using latest version instead"
+    if ( installed rtorrent ); then
+        rt_current=$(rtorrent -h | grep -om 1 "[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}")
+        echo "rtorrent $rt_current detected"
+    else
+        echo "rtorrent NOT installed"
+        echo "This script is for upgrading/downgrading only, not for initial install"
+        exit 1
     fi
-    libvers=$latest_libvers
-    rtvers=$latest_rtvers
-  else
-    libvers=$(echo $passed_rtvers | awk -F. -v OFS=. '{$2='$(( $(echo $rtversion | cut -d. -f2) + 4 ))'; print }')
-    rtvers=$passed_rtvers
-  fi
 
-  # checks if the OS is debian 9, and forces the version to 0.9.6 of it is
-  if [ $rtdevrel = 0 ]; then
-    libvers='0.13.6'
-    rtvers='0.9.6'
-    echo "Debian 9 and Ubuntu 17.10 are only supported by libtorrent-0.13.6/rtorrent-0.9.6"
-  fi
+    list_version
+
+    echo "Install libtorrent-$libvers and rtorrent-$rtvers"
+    echo "Your rtorrent config, torrents, and data will not be lost or changed"
+    echo -n "Continue? "
+    if ! ask_user; then
+        exit
+    fi
+
+else
+
+    if [ "$passed_rtvers" = "latest" ] || [ $(wget -q -O - $sourcedir | grep -o "rtorrent-$passed_rtvers.tar.gz" | wc -l) -eq 0 ]; then
+        if [ "$passed_rtvers" != "latest" ]; then
+            echo "Could not find $passed_rtvers so using latest version instead"
+        fi
+        libvers=$latest_libvers
+        rtvers=$latest_rtvers
+    else
+        libvers=$(echo $passed_rtvers | awk -F. -v OFS=. '{$2='$(( $(echo $rtversion | cut -d. -f2) + 4 ))'; print }')
+        rtvers=$passed_rtvers
+    fi
 
 fi
 
@@ -213,7 +203,7 @@ if  [[ $rtdevrel == 0 ]]; then
 elif [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
-elif [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.7 ]]; then
+elif [[ $rtvers == 0.9.7 ]]; then
     git clone -q https://github.com/rakshasa/libtorrent libtorrent-0.13.7
     cd libtorrent-0.13.7
     git checkout v0.13.7

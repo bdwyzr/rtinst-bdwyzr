@@ -197,19 +197,16 @@ echo "Fetching source files"
 
 
 
-if  [[ $rtdevrel == 0 ]]; then
-    git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
-    git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
-elif [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
+if [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
     git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
 elif [[ $rtvers == 0.9.7 ]]; then
     git clone -q https://github.com/rakshasa/libtorrent libtorrent-0.13.7
     cd libtorrent-0.13.7
-    git checkout v0.13.7
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
-    git cherry-pick 7b29b6b
+    git checkout v0.13.7 >> $logfile 2>&1
+    git config --global user.email "you@example.com" >> $logfile 2>&1
+    git config --global user.name "Your Name" >> $logfile 2>&1
+    git cherry-pick 7b29b6b >> $logfile 2>&1
     cd ..
     git clone -q --depth=1 -b v0.9.7 --single-branch https://github.com/rakshasa/rtorrent rtorrent-$rtvers
 elif [[ $enable_ipv6 == 0 ]] && [[ ! $rtvers == 0.9.6 ]]; then

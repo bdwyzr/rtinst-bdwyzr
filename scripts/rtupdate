@@ -198,8 +198,8 @@ echo "Fetching source files"
 
 
 if [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
-    git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
-    git clone -q --depth=1 -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
+    git clone -q -b feature-bind -o 89dde7f --depth 1 https://github.com/rakshasa/libtorrent libtorrent libtorrent-$libvers
+    git clone -q -b feature-bind -o 5d22fdd --depth 1 https://github.com/rakshasa/rtorrent   rtorrent-$rtvers
 elif [[ $rtvers == 0.9.7 ]]; then
     git clone -q https://github.com/rakshasa/libtorrent libtorrent-0.13.7
     cd libtorrent-0.13.7

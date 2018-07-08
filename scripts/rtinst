@@ -897,8 +897,8 @@ chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
 ###### ruTorrent themes #######
 echo "Installing ruTorrent themes" | tee -a $logfile
 cd /var/www/rutorrent/plugins/theme/themes
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> $logfile 2>&1
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> $logfile 2>&1
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> /dev/null 2>&1
+svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> /dev/null 2>&1
 
 #### ruTorrent filemanager ####
 echo "Installing ruTorrent third party plugins" | tee -a $logfile

@@ -740,7 +740,7 @@ cp -f /etc/rtinst/conf/rutorrent.conf    /etc/nginx/snippets/rutorrent.conf
 cp -f /etc/rtinst/conf/qbittorrent.conf   /etc/nginx/snippets/qbittorrent.conf
 cp -f /etc/rtinst/conf/transmission.conf /etc/nginx/snippets/transmission.conf
 cp -f /etc/rtinst/conf/flood.conf /etc/nginx/snippets/flood.conf
-# cp -f /etc/rtinst/conf/flexget.conf /etc/nginx/snippets/flexget.conf
+cp -f /etc/rtinst/conf/flexget.conf /etc/nginx/snippets/flexget.conf
 
 service nginx restart && service $phpver-fpm restart
 

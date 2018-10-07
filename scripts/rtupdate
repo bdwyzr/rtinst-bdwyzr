@@ -199,11 +199,11 @@ echo "Fetching source files"
 if [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
     git clone https://github.com/rakshasa/libtorrent libtorrent-$libvers >> $logfile 2>&1
     cd libtorrent-$libvers
-    git checkout 89dde7f >> $logfile 2>&1
+    git checkout 9eb9ba2 >> $logfile 2>&1
     cd ..
     git clone https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
     cd rtorrent-$rtvers
-    git checkout 5d22fdd >> $logfile 2>&1
+    git checkout b088c1c >> $logfile 2>&1
     cd ..
 elif [[ $rtvers == 0.9.7 ]]; then
     git clone https://github.com/rakshasa/libtorrent libtorrent-0.13.7 >> $logfile 2>&1

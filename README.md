@@ -49,15 +49,14 @@ Set SCGIServerTimeout to 60
 Fix AutoDL-Irssi issue on Ubuntu 16.04  
 
 - **Install h5ai as file indexer**  
-- **Install ffmpeg 3.4.2 from static builds**  
-- **Install rar, unrar 5.5.0 (donot use apt)**  
+- **Install ffmpeg 4.0.2 from static builds**  
+- **Install rar, unrar 5.6.1**  
 - **Enable rTorrent logging**  
 - **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  
 - **Raised open file limits to 666666**  
 
-- **Setup Nginx Reverse Proxy for Deluge, qBittorrent and Transmission**  
-2018.04.06: Temporarily disabled  
+- **Setup Nginx Reverse Proxy for Deluge, qBittorrent, Transmission, Flood and Flexget**  
 
 - **To be added ...**  
 

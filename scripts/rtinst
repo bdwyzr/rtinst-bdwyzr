@@ -829,6 +829,9 @@ if [ $osname = "Raspbian" ]; then
   echo 'enabled = no' >> /var/www/rutorrent/conf/plugins.ini
 fi
 
+# set min rss interval to 1 minutes
+sed -i "s/2/1/" /var/www/rutorrent/plugins/rss/conf.php
+
 ###############################
 ### INSTALL AUTODL-IRSSI ###
 ###############################
@@ -897,8 +900,8 @@ chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
 ###### ruTorrent themes #######
 echo "Installing ruTorrent themes" | tee -a $logfile
 cd /var/www/rutorrent/plugins/theme/themes
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> /dev/null 2>&1
-svn co https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> /dev/null 2>&1
+svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> /dev/null 2>&1
+svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> /dev/null 2>&1
 
 #### ruTorrent filemanager ####
 echo "Installing ruTorrent third party plugins" | tee -a $logfile

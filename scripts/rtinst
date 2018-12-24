@@ -829,8 +829,8 @@ if [ $osname = "Raspbian" ]; then
   echo 'enabled = no' >> /var/www/rutorrent/conf/plugins.ini
 fi
 
-# set min rss interval to 1 minutes
-sed -i "s/2/1/" /var/www/rutorrent/plugins/rss/conf.php
+# set min rss interval to 0.1 minutes
+sed -i "s/2/0.1/" /var/www/rutorrent/plugins/rss/conf.php
 
 ###############################
 ### INSTALL AUTODL-IRSSI ###

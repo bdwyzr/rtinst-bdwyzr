@@ -536,8 +536,8 @@ fi
 #install ffmpeg
 echo "Installing ffmpeg" ; cd
 if [ "$(uname -m)" = "x86_64" ]; then
-    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-4.0.2-64bit-static.tar.xz >> $logfile 2>&1
-    tar xf ffmpeg-4.0.2-64bit-static.tar.xz
+    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-4.1-64bit-static.tar.xz >> $logfile 2>&1
+    tar xf ffmpeg-4.1-64bit-static.tar.xz
 elif [ "$(uname -m)" = "x86_32" ]; then
     wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-32bit-static.tar.xz >> $logfile 2>&1
     tar xf ffmpeg-3.4.2-32bit-static.tar.xz

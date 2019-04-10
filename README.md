@@ -43,23 +43,19 @@ Install MaterialDesign theme
 Install Filemanager plugin  
 Install Fileshare plugin  
 Install Mediastream plugin  
-Install sox for ruTorrent spectrogram plugin  
+Install sox for ruTorrent plugin spectrogram  
+Install python cfscrape module for ruTorrent plugin CloudFlare  
 Enable m2ts support for screenshots plugin  
-Set SCGIServerTimeout to 60  
-Fix AutoDL-Irssi issue on Ubuntu 16.04  
+Set min rss interval to 0.1 minutes  
 
 - **Install h5ai as file indexer**  
-- **Install ffmpeg 4.0.2 from static builds**  
+- **Install ffmpeg 4.1 from static builds**  
 - **Install rar, unrar 5.6.1**  
-- **Enable rTorrent logging**  
 - **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  
 - **Raised open file limits to 666666**  
-
 - **Setup Nginx Reverse Proxy for Deluge, qBittorrent, Transmission, Flood and Flexget**  
-
-- **To be added ...**  
-
+- Set SCGIServerTimeout to 60  
 
 
 

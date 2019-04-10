@@ -45,6 +45,7 @@ Install Fileshare plugin
 Install Mediastream plugin  
 Install sox for ruTorrent plugin spectrogram  
 Install python cfscrape module for ruTorrent plugin CloudFlare  
+Install GeoIP2 plugin instead of GeoIP  
 Enable m2ts support for screenshots plugin  
 Set min rss interval to 0.1 minutes  
 

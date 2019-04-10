@@ -959,6 +959,9 @@ chmod -R 755 /var/www/rutorrent/plugins/filemanager/scripts
 #chmod 775 /var/www/rutorrent/plugins/fileupload/scripts/upload
 #cp /var/www/rutorrent/plugins/fileupload/conf.php /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload/conf.php
 
+# Need to disable GeoIP plugin
+git clone https://github.com/Micdu70/geoip2-rutorrent /var/www/rutorrent/plugins/geoip2
+
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileshare
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share.php
 sed -i "s|'http://mydomain.com/share.php';|\$_SERVER['HTTP_HOST'] . '/share.php';|g" /var/www/rutorrent/plugins/fileshare/conf.php

@@ -888,27 +888,37 @@ else
   echo "gui-server-password = $adlpass" >> autodl.cfg
 fi
 
+
+##############################################################
+######################## Aniverse Mod ########################
+##############################################################
+
 # Fix AutoDL-Irssi issues on Ubuntu 16.04
 apt-get install -y php-xml >> $logfile 2>&1
 
-
-###############################
-### Aniverse Mod ###
-###############################
-
-# 我也忘记是干嘛用的了
+# I have forgotten what are these used for
 apt-get install -y --allow-unauthenticated libncurses5-dev libncursesw5-dev >> $logfile 2>&1
 
 # Used for logging
-mkdir -p /etc/inexistence/01.Log
-touch /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
-chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
+#     mkdir -p /etc/inexistence/01.Log
+#     touch /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
+#     chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
 
 ###### ruTorrent themes #######
-echo "Installing ruTorrent themes" | tee -a $logfile
+echo "Installing ruTorrent third party themes" | tee -a $logfile
 cd /var/www/rutorrent/plugins/theme/themes
 svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> /dev/null 2>&1
 svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> /dev/null 2>&1
+
+#### ruTorrent plugin fix ####
+echo "Installing cfscrape module for ruTorrent plugin CloudFlare" | tee -a $logfile
+apt-get install -y python python-pip >> $logfile 2>&1
+pip install --upgrade pip setuptools >> $logfile 2>&1
+/usr/local/bin/pip install cfscrape pyrocore >> $logfile 2>&1
+# pyrocore is very useful for rTorrent
+
+echo "Installing sox for ruTorrent plugin Spectrogram" | tee -a $logfile
+apt-get install -y sox libsox-fmt-mp3 >> $logfile 2>&1
 
 #### ruTorrent filemanager ####
 echo "Installing ruTorrent third party plugins" | tee -a $logfile
@@ -960,7 +970,7 @@ git clone https://github.com/xombiemp/rutorrentMobile mobile >> $logfile 2>&1
 
 ############ h5ai #############
 echo "Configuring h5ai" | tee -a $logfile
-apt-get install -y imagemagick vim sox libsox-fmt-mp3 >> $logfile 2>&1
+apt-get install -y imagemagick vim >> $logfile 2>&1
 mkdir -p /var/www/h5ai && cd /var/www/h5ai
 wget --no-check-certificate -t1 --timeout=7 https://release.larsjung.de/h5ai/h5ai-0.29.0.zip >> $logfile 2>&1
 unzip -o h5ai-0.29.0.zip >/dev/null
@@ -968,7 +978,6 @@ rm -rf h5ai-0.29.0.zip # index.html
 chmod 755 -R _h5ai/private/cache _h5ai/public/cache
 service nginx restart >> $logfile 2>&1
 ln -s /home/${user}/rtorrent/download /var/www/h5ai/rtorrent
-
 
 ###############################
 ### FINAL TASKS ###

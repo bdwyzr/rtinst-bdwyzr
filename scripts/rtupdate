@@ -181,30 +181,23 @@ if [ -z "$home" ]; then
 fi
 
 echo
-echo "Installing libtorrent-$libvers/rtorrent-$rtvers $ipv6show"
+echo "Installing libtorrent-$libvers/rtorrent-$rtvers $ipv6show" | tee -a $logfile
 
 cd $home
-
-if [ -d source ]; then
-  cd source
-else
-  mkdir source && cd source
-fi
+mkdir -p source && cd source
 rm -rf xmlrpc libtorrent* rtorrent*
 
-echo "Fetching source files"
-
-
+echo "Fetching source files" | tee -a $logfile
 
 if [[ $enable_ipv6 == 0 ]] && [[ $rtvers == 0.9.6 ]]; then
     git clone https://github.com/rakshasa/libtorrent libtorrent-$libvers >> $logfile 2>&1
     cd libtorrent-$libvers
     git checkout 9eb9ba2 >> $logfile 2>&1
-    cd ..
+    cd $home/source
     git clone https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
     cd rtorrent-$rtvers
     git checkout b088c1c >> $logfile 2>&1
-    cd ..
+    cd $home/source
 elif [[ $rtvers == 0.9.7 ]]; then
     git clone https://github.com/rakshasa/libtorrent libtorrent-0.13.7 >> $logfile 2>&1
     cd libtorrent-0.13.7
@@ -212,7 +205,7 @@ elif [[ $rtvers == 0.9.7 ]]; then
     git config --global user.email "you@example.com" >> $logfile 2>&1
     git config --global user.name "Your Name" >> $logfile 2>&1
     git cherry-pick 7b29b6b >> $logfile 2>&1
-    cd ..
+    cd $home/source
     git clone --depth=1 -b v0.9.7 --single-branch https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
 elif [[ $enable_ipv6 == 0 ]] && [[ ! $rtvers == 0.9.6 ]]; then
     wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/libtorrent-$libvers.tar.gz | tar xz
@@ -222,10 +215,7 @@ else
     curl -s http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz    | tar xz
 fi
 
-
-
-
-if [ $xmlrpc_repo = 0 ]; then
+if [ $xmlrpc_repo = 0 ] && [ ! -d /usr/include/xmlrpc-c ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
 
   cd xmlrpc
@@ -233,7 +223,19 @@ if [ $xmlrpc_repo = 0 ]; then
   ./configure --prefix=/usr --disable-cplusplus >> $logfile 2>&1
   make -j$(nproc) >> $logfile 2>&1
   make -s install >> $logfile 2>&1
-  cd ..
+  cd tools
+  make -j$(nproc) >> $logfile 2>&1
+  make -s install >> $logfile 2>&1
+  cd $home/source
+fi
+
+# In case of failing to build xmlrpc
+if [ ! -d /usr/include/xmlrpc-c ]; then
+  apt-get install -y libxmlrpc-c++8-dev
+fi
+
+if [ ! -d /usr/include/xmlrpc-c ]; then
+  echo "Failed to install xmlrpc-c" | tee -a $logfile
 fi
 
 cd libtorrent-$libvers
@@ -247,7 +249,8 @@ fi
 make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 
-cd ../rtorrent-$rtvers
+cd $home/source
+cd rtorrent-$rtvers
 echo "Installing rtorrent" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
 ./configure --prefix=/usr --with-xmlrpc-c $ipv6opt >> $logfile 2>&1
@@ -255,8 +258,11 @@ make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 ldconfig >> $logfile 2>&1
 
- echo "$libvers/$rtvers installed"
- echo
+if [ ! -f /usr/bin/rtorrent ]; then
+  echo "Failed to build rtorrent" | tee -a $logfile
+else
+  echo -e "$libvers/$rtvers installed\n" | tee -a $logfile
+fi
 
 if [ -d /var/www/rutorrent/conf/users ]; then
   cd /var/www/rutorrent/conf/users

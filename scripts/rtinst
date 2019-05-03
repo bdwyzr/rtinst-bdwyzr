@@ -910,23 +910,24 @@ apt-get install -y --allow-unauthenticated libncurses5-dev libncursesw5-dev >> $
 #     chmod -R 666 /etc/inexistence/01.Log/{rutorrent_errors.log,rtorrent.log}
 
 ###### ruTorrent themes #######
-echo "Installing ruTorrent third party themes" | tee -a $logfile
+echo "Installing ruTorrent themes" | tee -a $logfile
 cd /var/www/rutorrent/plugins/theme/themes
 svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/MaterialDesign >> /dev/null 2>&1
 svn co -q https://github.com/ArtyumX/ruTorrent-Themes/trunk/club-QuickBox >> /dev/null 2>&1
 
-#### ruTorrent plugin fix ####
-echo "Installing cfscrape module for ruTorrent plugin CloudFlare" | tee -a $logfile
+#### ruTorrent Plugins ####
+
+echo "Installing ruTorrent plugins" | tee -a $logfile
+# echo "Installing cfscrape module for ruTorrent plugin CloudFlare" | tee -a $logfile
 apt-get install -y python python-pip >> $logfile 2>&1
 pip install --upgrade pip setuptools >> $logfile 2>&1
 /usr/local/bin/pip install cfscrape pyrocore >> $logfile 2>&1
 # pyrocore is very useful for rTorrent
 
-echo "Installing sox for ruTorrent plugin Spectrogram" | tee -a $logfile
+# echo "Installing sox for ruTorrent plugin Spectrogram" | tee -a $logfile
 apt-get install -y sox libsox-fmt-mp3 >> $logfile 2>&1
 
-#### ruTorrent filemanager ####
-echo "Installing ruTorrent third party plugins" | tee -a $logfile
+
 cd /var/www/rutorrent/plugins
 apt-get -y install zip >> $logfile 2>&1
 
@@ -965,7 +966,7 @@ chmod -R 755 /var/www/rutorrent/plugins/filemanager/scripts
 #cp /var/www/rutorrent/plugins/fileupload/conf.php /var/www/rutorrent/conf/users/"${user}"/plugins/fileupload/conf.php
 
 # Need to disable GeoIP plugin
-git clone https://github.com/Micdu70/geoip2-rutorrent /var/www/rutorrent/plugins/geoip2
+git clone -q https://github.com/Micdu70/geoip2-rutorrent /var/www/rutorrent/plugins/geoip2 >> $logfile 2>&1
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileshare
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share.php
@@ -974,7 +975,7 @@ sed -i "s|'http://mydomain.com/share.php';|\$_SERVER['HTTP_HOST'] . '/share.php'
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/mediastream
 ln -s /var/www/rutorrent/plugins/mediastream/view.php /var/www/mediastream.php
 
-git clone https://github.com/xombiemp/rutorrentMobile mobile >> $logfile 2>&1
+git clone -q https://github.com/xombiemp/rutorrentMobile mobile >> $logfile 2>&1
 
 ############ h5ai #############
 echo "Configuring h5ai" | tee -a $logfile

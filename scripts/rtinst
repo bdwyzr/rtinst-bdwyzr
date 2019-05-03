@@ -714,6 +714,8 @@ mv -n /etc/nginx/sites-available/default /etc/nginx/sites-available/default.orig
 cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 cp -f /etc/rtinst/conf/nginxsitedl /etc/nginx/sites-available/dload-loc
 
+sed -i "s/SSSOCK/$phpver-fpm.sock/" /etc/nginx/sites-available/default
+
 echo "location ~ \.php$ {" > /etc/nginx/conf.d/php
 echo "          fastcgi_split_path_info ^(.+\.php)(/.+)$;" >> /etc/nginx/conf.d/php
 
@@ -969,8 +971,8 @@ chmod -R 755 /var/www/rutorrent/plugins/filemanager/scripts
 git clone -q https://github.com/Micdu70/geoip2-rutorrent /var/www/rutorrent/plugins/geoip2 >> $logfile 2>&1
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/fileshare
+sed -i 's/$downloadpath .*/$downloadpath = '"'https:\/\/'"' . $_SERVER['"'HTTP_HOST'"'] . '"'\/share.php'"';/g' /var/www/rutorrent/plugins/fileshare/conf.php
 ln -s /var/www/rutorrent/plugins/fileshare/share.php /var/www/share.php
-sed -i "s|'http://mydomain.com/share.php';|\$_SERVER['HTTP_HOST'] . '/share.php';|g" /var/www/rutorrent/plugins/fileshare/conf.php
 
 svn co -q https://github.com/nelu/rutorrent-thirdparty-plugins/trunk/mediastream
 ln -s /var/www/rutorrent/plugins/mediastream/view.php /var/www/mediastream.php

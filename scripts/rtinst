@@ -936,7 +936,7 @@ echo "Installing ruTorrent plugins" | tee -a $logfile
 # echo "Installing cfscrape module for ruTorrent plugin CloudFlare" | tee -a $logfile
 apt-get install -y python python-pip >> $logfile 2>&1
 pip install --upgrade pip setuptools >> $logfile 2>&1
-/usr/local/bin/pip install cfscrape pyrocore >> $logfile 2>&1
+/usr/local/bin/pip install cfscrape cloudscraper pyrocore >> $logfile 2>&1
 # pyrocore is very useful for rTorrent
 
 # echo "Installing sox for ruTorrent plugin Spectrogram" | tee -a $logfile

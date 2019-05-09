@@ -216,9 +216,9 @@ else
 fi
 
 if [ $xmlrpc_repo = 0 ] && [ ! -d /usr/include/xmlrpc-c ]; then
-  svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
-
+  { svn co $xmlrpcloc xmlrpc || git clone --depth=1 https://github.com/mirror/xmlrpc-c xmlrpc ; } >> $logfile 2>&1
   cd xmlrpc
+  [ -d stable ] && cd stable
   echo "Installing xmlrpc" | tee -a $logfile
   ./configure --prefix=/usr --disable-cplusplus >> $logfile 2>&1
   make -j$(nproc) >> $logfile 2>&1
@@ -231,7 +231,8 @@ fi
 
 # In case of failing to build xmlrpc
 if [ ! -d /usr/include/xmlrpc-c ]; then
-  apt-get install -y libxmlrpc-c++8-dev
+  echo "Failed to build xmlrpc, install it from apt"
+  apt-get install -y libxmlrpc-c++8-dev >> $logfile 2>&1
 fi
 
 if [ ! -d /usr/include/xmlrpc-c ]; then

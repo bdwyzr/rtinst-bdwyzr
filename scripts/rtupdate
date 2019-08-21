@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2018.06.09
+# 2019.08.20
 
 ######################################################################
 #
@@ -33,9 +33,13 @@ while getopts ":i" optname; do
     esac
 done
 
-[[ $enable_ipv6 == 0 ]] && ipv6opt=--enable-ipv6 && ipv6show="(with IPv6 support)"
+[[ $enable_ipv6 == 0 ]] && ipv6opt="--enable-ipv6" && ipv6show="(with IPv6 support)"
 
-if [ $relno = 9 ] || [ $(lsb_release -sr) = 17.10 ] || [ $relno = 18 ]; then
+if [ $(lsb_release -sr) = 17.10 ]; then
+  rtdevrel=0
+fi
+
+if ([ "$osname" = "Debian" ] || [ "$osname" = "Raspbian" ] && [ $relno -ge 9 ]) || ([ "$osname" = "Ubuntu" ] && [ $relno -ge 18 ]); then
   rtdevrel=0
 fi
 
@@ -207,6 +211,15 @@ elif [[ $rtvers == 0.9.7 ]]; then
     git cherry-pick 7b29b6b >> $logfile 2>&1
     cd $home/source
     git clone --depth=1 -b v0.9.7 --single-branch https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
+elif [[ $rtvers == 0.9.8 ]]; then
+    libvers=0.13.8
+    git clone --depth=1 -b v0.13.8 https://github.com/rakshasa/libtorrent libtorrent-$libvers >> $logfile 2>&1
+    git clone --depth=1 -b v0.9.8 https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
+elif [[ $rtvers == feature ]]; then
+    rtvers=0.9.8
+    libvers=0.13.8
+    git clone --depth=1 -b feature-bind https://github.com/rakshasa/libtorrent libtorrent-$libvers >> $logfile 2>&1
+    git clone --depth=1 -b feature-bind https://github.com/rakshasa/rtorrent rtorrent-$rtvers >> $logfile 2>&1
 elif [[ $enable_ipv6 == 0 ]] && [[ ! $rtvers == 0.9.6 ]]; then
     wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/libtorrent-$libvers.tar.gz | tar xz
     wget -qO- https://github.com/Aniverse/BitTorrentClientCollection/raw/master/rTorrent-IPv6/rtorrent-$rtvers.tar.gz    | tar xz

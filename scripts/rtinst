@@ -14,6 +14,9 @@
 ### SET VARIABLES ###
 ###############################
 
+# Update: 2019.08.20
+# https://github.com/arakasi72/rtinst/compare/v1.7.4...v1.8.4
+
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 
 #url's of the major components
@@ -51,7 +54,7 @@ if [ $(lsb_release -sr) = "17.10" ]; then
   geoipver=php-geoip
 fi
 
-if [ "$relno" = "18" ]; then
+if [ "$relno" = "18" ] || [ "$relno" = "19" ]; then
   phpver=php7.2
   phploc=/etc/php/7.2
   geoipver=php-geoip
@@ -90,7 +93,9 @@ sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl"
+passfile='/etc/nginx/.htpasswd'
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl $phpver-xml mktorrent"
+# libcloog-ppl-dev libcppunit-dev cfv
 Install_list=""
 unixpass=""
 passflag=0

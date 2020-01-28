@@ -482,9 +482,9 @@ echo
 
 # Install MediaInfo repo for installing latest mediainfo
 echo "Installing Mediaarea" | tee $logfile
-wget --no-check-certificate https://mediaarea.net/repo/deb/repo-mediaarea_1.0-6_all.deb >> $logfile 2>&1
-dpkg -i repo-mediaarea_1.0-6_all.deb >> $logfile 2>&1
-rm -rf repo-mediaarea_1.0-6_all.deb
+wget --no-check-certificate https://mediaarea.net/repo/deb/repo-mediaarea_1.0-12_all.deb >> $logfile 2>&1
+dpkg -i repo-mediaarea_1.0-12_all.deb >> $logfile 2>&1
+rm -rf repo-mediaarea_1.0-12_all.deb
 
 #update amd upgrade system
 echo "Updating package lists" | tee $logfile

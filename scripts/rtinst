@@ -435,7 +435,7 @@ if [ -z "$webpass" ]  && [ $passflag != 2 ]; then
       passflag=2
     fi
   fi
-  
+
   if [ $passflag != 2 ]; then
     echo "Set Password for RuTorrent web client"
     webpass=$(set_pass)
@@ -523,13 +523,13 @@ if ! installed unrar; then
     echo "Installing rar/unrar"
     cd /root
     if [ "$(uname -m)" = "x86_64" ]; then
-        wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-x64-5.6.1.tar.gz >> $logfile 2>&1
-        tar xvzf rarlinux-x64-5.6.1.tar.gz >> $logfile 2>&1
-        rm rarlinux-x64-5.6.1.tar.gz
-    elif [ "$(uname -m)" = "x86_32" ]; then
-        wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-5.6.1.tar.gz >> $logfile 2>&1
-        tar xvzf rarlinux-5.6.1.tar.gz >> $logfile 2>&1
-        rm rarlinux-5.6.1.tar.gz
+        wget https://github.com/bdwyzr/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-x64-5.8.0.tar.gz >> $logfile 2>&1
+        tar xvzf rarlinux-x64-5.8.0.tar.gz >> $logfile 2>&1
+        rm rarlinux-x64-5.8.0.tar.gz
+#    elif [ "$(uname -m)" = "x86_32" ]; then
+#        wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/rarlinux-5.6.1.tar.gz >> $logfile 2>&1
+#        tar xvzf rarlinux-5.6.1.tar.gz >> $logfile 2>&1
+#        rm rarlinux-5.6.1.tar.gz
     fi
     cp -f /root/rar/rar /bin/rar
     cp -f /root/rar/unrar /bin/unrar
@@ -545,11 +545,11 @@ fi
 #install ffmpeg
 echo "Installing ffmpeg" ; cd
 if [ "$(uname -m)" = "x86_64" ]; then
-    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-4.1-64bit-static.tar.xz >> $logfile 2>&1
-    tar xf ffmpeg-4.1-64bit-static.tar.xz
-elif [ "$(uname -m)" = "x86_32" ]; then
-    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-32bit-static.tar.xz >> $logfile 2>&1
-    tar xf ffmpeg-3.4.2-32bit-static.tar.xz
+    wget https://github.com/bdwyzr/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-4.2.2-amd64-static.tar.xz >> $logfile 2>&1
+    tar xf ffmpeg-4.2.2-amd64-static.tar.xz
+#elif [ "$(uname -m)" = "x86_32" ]; then
+#    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-32bit-static.tar.xz >> $logfile 2>&1
+#    tar xf ffmpeg-3.4.2-32bit-static.tar.xz
 fi
 rm -rf ffmpeg-*bit-static/{manpages,presets,model,readme.txt,GPLv3.txt}
 cp ffmpeg-*bit-static/* /usr/local/bin

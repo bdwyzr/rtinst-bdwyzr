@@ -5,17 +5,16 @@
 ## Installation
 
 ```
-bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/Aniverse/rtinst/master/rtsetup)"
+bash -c "$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/bdwyzr/rtinst-bdwyzr/master/rtsetup?token=AEIWRO2V4JGCXW3CXMOQJ2S6HD4Y4
 ```
 ```
-rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD 
+rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 ```
 ```
 rtinst -tfylmi -v 0.9.4 -u aniverse -p kinots74212 -w rutmypa44  
 ```
 
 - `-t` Do NOT change SSH port  
-- `-f` Set FTP port to 21  
 - `-y` Force yes to all the questions  
 - `-l` Enable logging to ~/rtinst.log  
 - `-m` Install the latest master build of rutorrent  
@@ -25,15 +24,10 @@ rtinst -tfylmi -v 0.9.4 -u aniverse -p kinots74212 -w rutmypa44
 - `-w` Set the web password for the user  
 - `-v` Set the rTorrent version you would like to be installed  
 
-
-
-
-
 ## Modifications
 
 - **New Opinions**  
 Using `-i` opinion to enable IPv6 support  
-Using `-f` opinion to set FTP port to 21  
 Using `-t` opinion to keep the old SSH port  
 Using `-v` opinion to select the rtorrent version to be installed  
 
@@ -50,8 +44,8 @@ Enable m2ts support for screenshots plugin
 Set min rss interval to 0.1 minutes  
 
 - **Install h5ai as file indexer**  
-- **Install ffmpeg 4.1 from static builds**  
-- **Install rar, unrar 5.6.1**  
+- **Install ffmpeg 4.2 from static builds**  
+- **Install rar, unrar 5.8.0**  
 - **Tweak rTorrent default settings**  
 - **Do NOT disable root login**  
 - **Raised open file limits to 666666**  

@@ -5,7 +5,7 @@
 ## Installation
 
 ```
-bash -c "$(wget --no-check-certificate -q0- https://raw.githubusercontent.com/bdwyzr/rtinst-bdwyzr/master/rtsetup)"
+sudo bash -c "$(wget --no-check-certificate -qO - https://https://raw.githubusercontent.com/bdwyzr/rtinst-bdwyzr/master/rtsetup)"
 ```
 ```
 rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD

@@ -551,9 +551,9 @@ if [ "$(uname -m)" = "x86_64" ]; then
 #    wget https://github.com/Aniverse/BitTorrentClientCollection/raw/master/Other%20Tools/ffmpeg-3.4.2-32bit-static.tar.xz >> $logfile 2>&1
 #    tar xf ffmpeg-3.4.2-32bit-static.tar.xz
 fi
-
+rm -rf ffmpeg-*amd64-static/{manpages,presets,model,readme.txt,GPLv3.txt}
 cp ffmpeg-*amd64-static/* /usr/local/bin
-chmod 755 /usr/local/bin/{ffmpeg,ffprobe,ffmpeg-10bit,qt-faststart}
+chmod 755 /usr/local/bin/{ffmpeg,ffprobe,qt-faststart}
 rm -rf ffmpeg-*amd64-static*
 
 echo "Completed installation of required packages        "

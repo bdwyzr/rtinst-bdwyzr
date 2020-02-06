@@ -82,8 +82,8 @@ isValidIpAddress "$serverip" || { echo "Failed to detect your public IPv4 addres
 #export serverip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 export logfile="/dev/null"
 webpass=''
-cronline1="@reboot sleep 10; /usr/local/bin/rtcheck irssi rtorrent"
-cronline2="*/10 * * * * /usr/local/bin/rtcheck irssi rtorrent"
+cronline1="@reboot sleep 10; /usr/local/bin/rtcheck rtorrent"
+cronline2="*/10 * * * * /usr/local/bin/rtcheck rtorrent"
 dlflag=1
 ssh_port_default=1
 
@@ -93,7 +93,7 @@ rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop irssi libcloog-ppl-dev libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl $phpver-xml mktorrent"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl cfv dtach htop libcloog-ppl-dev libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl $geoipver $phpver-mcrypt $phpver-xmlrpc python-scgi screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common aptitude $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl $phpver-xml mktorrent"
 # libcloog-ppl-dev libcppunit-dev cfv
 Install_list=""
 unixpass=""
@@ -323,7 +323,6 @@ if [[ $xmlrpc_repo = 1 ]]; then
 fi
 
 echo -n "RuTorrent: ";check_url $ru_url && echo "OK" || { echo "FAIL"; major_repo=1; }
-echo -n "Autodl-irssi: "; check_url $adl_url && echo "OK" || { echo "FAIL"; major_repo=1; }
 
 if [ $os_repo = 1 ]; then
   echo "Some of your $osname mirrors are down, try again later"
@@ -801,54 +800,6 @@ fi
 # set min rss interval to 0.1 minutes
 sed -i "s/2/0.1/" /var/www/rutorrent/plugins/rss/conf.php
 
-###############################
-### INSTALL AUTODL-IRSSI ###
-###############################
-
-echo "Installing autodl-irssi" | tee -a $logfile
-adlport=$(random 36001 36100)
-adlpass=$(genpasswd $(random 12 16))
-
-mkdir -p $home/.irssi/scripts/autorun
-cd $home/.irssi/scripts
-curl -sL http://git.io/vlcND | grep -Po '(?<="browser_download_url": ")(.*-v[\d.]+.zip)' | xargs wget --quiet -O autodl-irssi.zip
-unzip -qq -o autodl-irssi.zip | tee -a $logfile
-rm autodl-irssi.zip
-cp autodl-irssi.pl autorun/
-mkdir -p $home/.autodl
-
-cd /var/www/rutorrent/plugins
-git clone -q https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi | tee -a $home/rtinst.info
-
-mkdir /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi
-
-touch /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-
-echo "<?php" > /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "\$autodlPort = $adlport;" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "\$autodlPassword = \"$adlpass\";" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "?>" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-
-cd $home/.autodl
-rm -f autodl2.cfg
-
-if [ -f "autodl.cfg" ]; then
-  if (grep -sq gui-server-port autodl.cfg) && (grep -sq gui-server-password autodl.cfg); then
-    sed -i "/gui-server-port/ c\gui-server-port = $adlport" autodl.cfg
-    sed -i "/gui-server-password/ c\gui-server-password = $adlpass" autodl.cfg
-  else
-    sed -i '/gui-server-port/ d' autodl.cfg
-    sed -i '/gui-server-password/ d' autodl.cfg
-    echo >> autodl.cfg
-    sed -i "1s/^/[options]\ngui-server-port = $adlport\ngui-server-password = $adlpass\n/" autodl.cfg
-  fi
-else
-  echo "[options]" > autodl.cfg
-  echo "gui-server-port = $adlport" >> autodl.cfg
-  echo "gui-server-password = $adlpass" >> autodl.cfg
-fi
 
 
 ##############################################################
@@ -872,9 +823,6 @@ for version in $phpv; do
   phpenmod -v $version opcache
 done
 cd
-
-# Fix AutoDL-Irssi issues on Ubuntu 16.04
-apt-get install -y php-xml >> $logfile 2>&1
 
 # I have forgotten what are these used for
 apt-get install -y --allow-unauthenticated libncurses5-dev libncursesw5-dev >> $logfile 2>&1
@@ -983,7 +931,7 @@ if [ -z "$(grep "ALL ALL = NOPASSWD: /usr/local/bin/rtsetpass" /etc/sudoers)" ];
   echo "ALL ALL = NOPASSWD: /usr/local/bin/rtsetpass" | (EDITOR="tee -a" visudo)  > /dev/null 2>&1
 fi
 
-# restart rtorrent and irssi
+# restart rtorrent
 su $user -c '/usr/local/bin/rt restart'
 su $user -c '/usr/local/bin/rt -i restart'
 
@@ -992,7 +940,7 @@ if [ -z "$(crontab -u $user -l | grep "$cronline1")" ]; then
     (crontab -u $user -l; echo "$cronline1" ) | crontab -u $user - >> $logfile 2>&1
 fi
 
-if [ -z  "$(crontab -u $user -l | grep "\*/10 \* \* \* \* /usr/local/bin/rtcheck irssi rtorrent")" ]; then
+if [ -z  "$(crontab -u $user -l | grep "\*/10 \* \* \* \* /usr/local/bin/rtcheck rtorrent")" ]; then
     (crontab -u $user -l; echo "$cronline2" ) | crontab -u $user - >> $logfile 2>&1
 fi
 
@@ -1029,7 +977,7 @@ echo | tee -a $home/rtinst.info
 echo "rtorrent torrent client" | tee -a $home/rtinst.info
 if installed rtorrent; then
   echo "   rtorrent $rt_current installed" | tee -a $home/rtinst.info
-  echo "   crontab entries made. rtorrent and irssi will start on boot for $user" | tee -a $home/rtinst.info
+  echo "   crontab entries made. rtorrent will start on boot for $user" | tee -a $home/rtinst.info
 else
   echo "   rtorrent was not installed" | tee -a $home/rtinst.info
 fi

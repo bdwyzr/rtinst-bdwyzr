@@ -12,7 +12,6 @@
 PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 FILE="$HOME/rtorrent/.session/rtorrent.lock"
 SERVICE='rtorrent'
-SERVICEB='irssi'
 RTPID=$(pgrep -fx -u $LOGNAME $SERVICE)
 # Sets default status can be askkill, autokill, or donotkill
 KILLSTATUS='askkill'

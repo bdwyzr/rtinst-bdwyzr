@@ -129,7 +129,6 @@ usage_help() {
 echo "usage: [-h] [-i] [-a|-k|-d] [-l] [start | stop | restart]"
 echo "options:"
 echo "  -h usage help display"
-echo "  -i sets service to $SERVICEB"
 echo "  -l send results to log file (~/rt.log)"
 echo "  -a if unable to close $SERVICE ask user whether to use kill -9"
 echo "  -k if unable to close $SERVICE use kill -9"
@@ -155,7 +154,7 @@ while getopts ":hlikad" optname
       "k" )[[ -n $OPTFLAG ]]  && useerr=1 || KILLSTATUS='autokill' && OPTFLAG=1 ;;
       "a" )[[ -n $OPTFLAG ]]  && useerr=1 || KILLSTATUS='askkill' && OPTFLAG=1 ;;
       "d" )[[ -n $OPTFLAG ]]  && useerr=1 || KILLSTATUS='donotkill' && OPTFLAG=1 ;;
-      "i" ) SERVICE=$SERVICEB && RTPID=$(pgrep -fx -u $LOGNAME $SERVICE) ;;
+      "i" ) RTPID=$(pgrep -fx -u $LOGNAME $SERVICE) ;;
       "l" ) LOGFLAG=1 ;;
       "h" ) helpflag=0 ;;
         * ) useerr=2 ;;

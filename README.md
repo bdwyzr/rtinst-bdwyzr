@@ -8,10 +8,10 @@
 sudo bash -c "$(wget --no-check-certificate -qO - https://raw.githubusercontent.com/bdwyzr/rtinst-bdwyzr/master/rtsetup)"
 ```
 ```
-rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
+sudo rtinst -$opinions -v $rtorrentVERSION -u $USERNAME -p $PASSWORD -w $WEBPASSWORD
 ```
 ```
-rtinst -tfylmi -v 0.9.4 -u aniverse -p kinots74212 -w rutmypa44  
+sudo rtinst -tfylmi -v 0.9.4 -u aniverse -p kinots74212 -w rutmypa44  
 ```
 
 - `-t` Do NOT change SSH port  
